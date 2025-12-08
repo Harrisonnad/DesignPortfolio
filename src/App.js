@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
-import { ChevronRight, Code, Layers, Zap, Sliders, Play } from 'lucide-react';
+import { ChevronRight, Code, Layers, Zap, Sliders, Play, X, ArrowLeft } from 'lucide-react';
 
 // DESIGN TOKEN SYSTEM - Outside component to prevent recreation
 const createTokenSystem = () => ({
@@ -65,6 +65,125 @@ const createTokenSystem = () => ({
     slow: '500ms',
   }
 });
+
+// Case study data with full details
+const CASE_STUDIES_DATA = [
+  {
+    id: 'truist',
+    client: 'Truist Financial',
+    title: 'Enterprise Banking Design System',
+    role: 'Lead Design Systems Engineer',
+    tags: ['Design Tokens', 'Multi-Product', 'Enterprise'],
+    challenge: 'Truist needed a unified design language across 15+ banking products following their merger, with inconsistent UI patterns creating user confusion and development inefficiencies.',
+    solution: 'Built a comprehensive token architecture from scratch, establishing primitive and semantic layers for color, typography, spacing, and motion. Created a systematic approach to brand consistency while allowing product-specific customization.',
+    impact: [
+      'Reduced design-to-dev handoff time by 40%',
+      'Achieved 100% WCAG AA compliance across token system',
+      'Enabled 3 product teams to ship features 2x faster',
+      'Documented 200+ design decisions in token metadata',
+    ],
+    implementation: {
+      before: `// Before: Inconsistent spacing
+padding: 18px;
+margin: 22px;
+gap: 15px;`,
+      after: `// After: Systematic tokens
+padding: var(--space-4); // 24px
+margin: var(--space-5); // 32px  
+gap: var(--space-3); // 16px`,
+      code: `const tokens = {
+  primitive: { 
+    blue500: '#3B82F6' 
+  },
+  semantic: { 
+    interactive: 'blue500',
+    buttonPrimary: 'interactive'
+  }
+};
+
+// Figma Variables → Code
+<Button color={tokens.semantic.buttonPrimary} />`,
+    }
+  },
+  {
+    id: 'johnson',
+    client: 'Johnson Controls',
+    title: 'Industrial IoT Component Library',
+    role: 'Senior UI/UX Engineer',
+    tags: ['Component Library', 'B2B SaaS', 'Atomic Design'],
+    challenge: 'Complex building automation dashboards required highly reusable components that could handle diverse data visualizations while maintaining consistency. Design debt from rapid feature development needed systematic resolution.',
+    solution: 'Implemented atomic design methodology (atoms → molecules → organisms) with strict modularity principles. Created 50+ base components with variant systems, establishing clear composition patterns and naming conventions.',
+    impact: [
+      'Built 80% of new features using existing components',
+      'Reduced component sprawl from 200+ to 50 core components',
+      'Established naming conventions adopted by 12-person engineering team',
+      'Created visual regression testing framework',
+    ],
+    implementation: {
+      atomic: {
+        atoms: 'Button, Input, Label, Icon',
+        molecules: 'FormField (Label + Input + Error)',
+        organisms: 'DataCard (FormField[] + Actions)',
+      },
+      code: `// Atomic Component Pattern
+interface ButtonProps {
+  variant: 'primary' | 'secondary';
+  size: 'sm' | 'md' | 'lg';
+}
+
+const Button: FC<ButtonProps> = ({ 
+  variant, 
+  size, 
+  children 
+}) => (
+  <button className={cx(
+    baseStyles,
+    variantStyles[variant],
+    sizeStyles[size]
+  )}>
+    {children}
+  </button>
+);`,
+    }
+  },
+  {
+    id: 'anheuser',
+    client: 'Anheuser-Busch',
+    title: 'Multi-Brand Consumer Platform',
+    role: 'Design Systems Lead',
+    tags: ['Multi-Brand', 'Theming', 'E-commerce'],
+    challenge: 'E-commerce platform needed to support 8+ beer brands with distinct visual identities while sharing core component logic. Required seamless switching between brand themes without code duplication.',
+    solution: 'Designed a flexible variant system using CSS variables and theme tokens. Established brand-agnostic component architecture with theme override capabilities. Led cross-functional adoption across design, engineering, and product teams.',
+    impact: [
+      'Launched 8 brand experiences using single component library',
+      'Reduced brand theme implementation from 2 weeks to 2 days',
+      'Mentored 4 junior engineers on design system best practices',
+      'Achieved 15% sprint bug reduction through systematic QA',
+    ],
+    implementation: {
+      brands: ['Budweiser', 'Stella Artois', 'Corona', 'Michelob Ultra'],
+      code: `// Multi-brand theming system
+const themes = {
+  budweiser: { 
+    primary: '#E00122',
+    secondary: '#000000'
+  },
+  stella: { 
+    primary: '#C8AA6E',
+    secondary: '#1A1A1A'
+  },
+  corona: {
+    primary: '#FFD700',
+    secondary: '#005EB8'
+  }
+};
+
+<ThemeProvider theme={themes[currentBrand]}>
+  <App />
+</ThemeProvider>`,
+    }
+  },
+];
 
 // Memoized Background Gradient Component
 const BackgroundGradient = memo(({ mousePosition, primaryColor }) => {
@@ -249,7 +368,7 @@ const TokenEditor = memo(({
             lineHeight: 1,
           }}
         >
-          ✕
+          <X />
         </button>
       </div>
 
@@ -261,7 +380,6 @@ const TokenEditor = memo(({
         Adjust tokens and watch the page update in real-time
       </div>
 
-      {/* Primary Accent */}
       <div style={{ marginBottom: `${tokens.spacing[6]}px` }}>
         <label style={{
           display: 'block',
@@ -286,7 +404,6 @@ const TokenEditor = memo(({
         />
       </div>
 
-      {/* Secondary Accent */}
       <div style={{ marginBottom: `${tokens.spacing[6]}px` }}>
         <label style={{
           display: 'block',
@@ -311,7 +428,6 @@ const TokenEditor = memo(({
         />
       </div>
 
-      {/* Spacing Scale */}
       <div style={{ marginBottom: `${tokens.spacing[6]}px` }}>
         <label style={{
           display: 'block',
@@ -334,7 +450,6 @@ const TokenEditor = memo(({
         />
       </div>
 
-      {/* Border Radius */}
       <div style={{ marginBottom: `${tokens.spacing[6]}px` }}>
         <label style={{
           display: 'block',
@@ -410,6 +525,339 @@ const FloatingButton = memo(({ onClick, tokens }) => {
 
 FloatingButton.displayName = 'FloatingButton';
 
+// Case Study Detail Component
+const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
+  const CodeBlock = useCallback(({ children, language = 'tsx' }) => (
+    <div style={{
+      background: tokens.colors.gray[900],
+      borderRadius: `${tokens.radius.md}px`,
+      padding: `${tokens.spacing[4]}px`,
+      marginTop: `${tokens.spacing[3]}px`,
+      overflow: 'auto',
+    }}>
+      <div style={{
+        fontFamily: tokens.typography.fontFamily.mono,
+        fontSize: `${tokens.typography.fontSize.sm}px`,
+        color: tokens.colors.gray[600],
+        marginBottom: `${tokens.spacing[2]}px`,
+      }}>
+        {language}
+      </div>
+      <pre style={{
+        fontFamily: tokens.typography.fontFamily.mono,
+        fontSize: `${tokens.typography.fontSize.sm}px`,
+        color: '#FFFFFF',
+        lineHeight: '1.7',
+        margin: 0,
+        whiteSpace: 'pre-wrap',
+      }}>
+        {children}
+      </pre>
+    </div>
+  ), [tokens]);
+
+  return (
+    <div style={{
+      padding: `${tokens.spacing[16]}px ${tokens.spacing[6]}px`,
+      background: tokens.colors.dark.bg,
+      minHeight: '100vh',
+    }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        {/* Back Button */}
+        <button
+          onClick={onClose}
+          className="animate-in"
+          style={{
+            background: 'none',
+            border: 'none',
+            color: tokens.colors.accent.primary,
+            fontFamily: tokens.typography.fontFamily.body,
+            fontSize: `${tokens.typography.fontSize.base}px`,
+            fontWeight: '600',
+            cursor: 'pointer',
+            marginBottom: `${tokens.spacing[8]}px`,
+            display: 'flex',
+            alignItems: 'center',
+            gap: `${tokens.spacing[2]}px`,
+            padding: `${tokens.spacing[2]}px 0`,
+            transition: `all ${tokens.animation.normal}`,
+          }}
+        >
+          <ArrowLeft size={20} />
+          Back to all case studies
+        </button>
+
+        {/* Header */}
+        <div className="animate-in stagger-1" style={{ marginBottom: `${tokens.spacing[12]}px` }}>
+          <div style={{
+            fontFamily: tokens.typography.fontFamily.mono,
+            fontSize: `${tokens.typography.fontSize.sm}px`,
+            color: tokens.colors.accent.primary,
+            marginBottom: `${tokens.spacing[2]}px`,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+          }}>
+            {study.client}
+          </div>
+          <h1 style={{
+            fontFamily: tokens.typography.fontFamily.display,
+            fontSize: `${tokens.typography.fontSize['4xl']}px`,
+            fontWeight: '800',
+            marginBottom: `${tokens.spacing[3]}px`,
+            lineHeight: '1.2',
+          }}>
+            {study.title}
+          </h1>
+          <div style={{
+            fontSize: `${tokens.typography.fontSize.xl}px`,
+            color: tokens.colors.gray[600],
+          }}>
+            {study.role}
+          </div>
+        </div>
+
+        {/* Challenge */}
+        <div className="animate-in stagger-2" style={{
+          background: tokens.colors.dark.elevated,
+          borderRadius: `${tokens.radius.lg}px`,
+          padding: `${tokens.spacing[6]}px`,
+          borderLeft: `4px solid ${tokens.colors.gray[700]}`,
+          marginBottom: `${tokens.spacing[8]}px`,
+        }}>
+          <h3 style={{
+            fontFamily: tokens.typography.fontFamily.display,
+            fontSize: `${tokens.typography.fontSize['2xl']}px`,
+            fontWeight: '700',
+            marginBottom: `${tokens.spacing[4]}px`,
+          }}>
+            Challenge
+          </h3>
+          <p style={{
+            fontSize: `${tokens.typography.fontSize.lg}px`,
+            color: tokens.colors.gray[600],
+            lineHeight: '1.7',
+          }}>
+            {study.challenge}
+          </p>
+        </div>
+
+        {/* Solution */}
+        <div className="animate-in stagger-3" style={{
+          background: tokens.colors.dark.elevated,
+          borderRadius: `${tokens.radius.lg}px`,
+          padding: `${tokens.spacing[6]}px`,
+          borderLeft: `4px solid ${tokens.colors.accent.primary}`,
+          marginBottom: `${tokens.spacing[8]}px`,
+        }}>
+          <h3 style={{
+            fontFamily: tokens.typography.fontFamily.display,
+            fontSize: `${tokens.typography.fontSize['2xl']}px`,
+            fontWeight: '700',
+            marginBottom: `${tokens.spacing[4]}px`,
+          }}>
+            Solution
+          </h3>
+          <p style={{
+            fontSize: `${tokens.typography.fontSize.lg}px`,
+            color: tokens.colors.gray[600],
+            lineHeight: '1.7',
+          }}>
+            {study.solution}
+          </p>
+        </div>
+
+        {/* Impact */}
+        <div className="animate-in stagger-4" style={{
+          background: tokens.colors.dark.elevated,
+          borderRadius: `${tokens.radius.lg}px`,
+          padding: `${tokens.spacing[6]}px`,
+          borderLeft: `4px solid ${tokens.colors.accent.tertiary}`,
+          marginBottom: `${tokens.spacing[12]}px`,
+        }}>
+          <h3 style={{
+            fontFamily: tokens.typography.fontFamily.display,
+            fontSize: `${tokens.typography.fontSize['2xl']}px`,
+            fontWeight: '700',
+            marginBottom: `${tokens.spacing[4]}px`,
+          }}>
+            Impact
+          </h3>
+          <ul style={{ 
+            paddingLeft: `${tokens.spacing[5]}px`,
+            margin: 0,
+          }}>
+            {study.impact.map((item, i) => (
+              <li key={i} style={{
+                fontSize: `${tokens.typography.fontSize.lg}px`,
+                color: tokens.colors.gray[600],
+                lineHeight: '1.7',
+                marginBottom: `${tokens.spacing[2]}px`,
+              }}>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Technical Implementation */}
+        <div>
+          <h2 style={{
+            fontFamily: tokens.typography.fontFamily.display,
+            fontSize: `${tokens.typography.fontSize['3xl']}px`,
+            fontWeight: '800',
+            marginBottom: `${tokens.spacing[6]}px`,
+          }}>
+            Technical Implementation
+          </h2>
+
+          {/* Token transformation (Truist) */}
+          {study.implementation.before && (
+            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[8]}px` }}>
+              <h4 style={{
+                fontSize: `${tokens.typography.fontSize.xl}px`,
+                fontWeight: '600',
+                marginBottom: `${tokens.spacing[4]}px`,
+              }}>
+                Token System Transformation
+              </h4>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: `${tokens.spacing[4]}px`,
+              }}>
+                <div>
+                  <div style={{
+                    fontSize: `${tokens.typography.fontSize.sm}px`,
+                    color: tokens.colors.gray[600],
+                    marginBottom: `${tokens.spacing[2]}px`,
+                  }}>
+                    Before
+                  </div>
+                  <CodeBlock language="css">
+                    {study.implementation.before}
+                  </CodeBlock>
+                </div>
+                <div>
+                  <div style={{
+                    fontSize: `${tokens.typography.fontSize.sm}px`,
+                    color: tokens.colors.gray[600],
+                    marginBottom: `${tokens.spacing[2]}px`,
+                  }}>
+                    After
+                  </div>
+                  <CodeBlock language="css">
+                    {study.implementation.after}
+                  </CodeBlock>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Atomic design (Johnson Controls) */}
+          {study.implementation.atomic && (
+            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[8]}px` }}>
+              <h4 style={{
+                fontSize: `${tokens.typography.fontSize.xl}px`,
+                fontWeight: '600',
+                marginBottom: `${tokens.spacing[4]}px`,
+              }}>
+                Atomic Design Hierarchy
+              </h4>
+              <div style={{
+                background: tokens.colors.dark.elevated,
+                borderRadius: `${tokens.radius.md}px`,
+                padding: `${tokens.spacing[4]}px`,
+                marginBottom: `${tokens.spacing[4]}px`,
+              }}>
+                {Object.entries(study.implementation.atomic).map(([key, value]) => (
+                  <div key={key} style={{
+                    fontFamily: tokens.typography.fontFamily.mono,
+                    fontSize: `${tokens.typography.fontSize.base}px`,
+                    marginBottom: `${tokens.spacing[2]}px`,
+                  }}>
+                    <span style={{ 
+                      color: tokens.colors.accent.primary,
+                      fontWeight: '600',
+                    }}>
+                      {key.charAt(0).toUpperCase() + key.slice(1)}
+                    </span>
+                    {' → '}
+                    <span style={{ color: tokens.colors.gray[600] }}>
+                      {value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Multi-brand theming (Anheuser-Busch) */}
+          {study.implementation.brands && (
+            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[8]}px` }}>
+              <h4 style={{
+                fontSize: `${tokens.typography.fontSize.xl}px`,
+                fontWeight: '600',
+                marginBottom: `${tokens.spacing[4]}px`,
+              }}>
+                Multi-Brand Theme System
+              </h4>
+              <div style={{
+                background: tokens.colors.dark.elevated,
+                borderRadius: `${tokens.radius.md}px`,
+                padding: `${tokens.spacing[4]}px`,
+                marginBottom: `${tokens.spacing[4]}px`,
+              }}>
+                <div style={{
+                  fontSize: `${tokens.typography.fontSize.sm}px`,
+                  color: tokens.colors.gray[600],
+                  marginBottom: `${tokens.spacing[3]}px`,
+                }}>
+                  Brands Supported:
+                </div>
+                <div style={{ 
+                  display: 'flex', 
+                  gap: `${tokens.spacing[2]}px`, 
+                  flexWrap: 'wrap',
+                  marginBottom: `${tokens.spacing[4]}px`,
+                }}>
+                  {study.implementation.brands.map(brand => (
+                    <span key={brand} style={{
+                      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                      background: tokens.colors.dark.bg,
+                      border: `1px solid ${tokens.colors.gray[800]}`,
+                      borderRadius: `${tokens.radius.sm}px`,
+                      fontSize: `${tokens.typography.fontSize.sm}px`,
+                      fontWeight: '500',
+                    }}>
+                      {brand}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Code example */}
+          <div className="animate-in">
+            <h4 style={{
+              fontSize: `${tokens.typography.fontSize.xl}px`,
+              fontWeight: '600',
+              marginBottom: `${tokens.spacing[4]}px`,
+            }}>
+              Implementation Code
+            </h4>
+            <CodeBlock language="tsx">
+              {study.implementation.code}
+            </CodeBlock>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+CaseStudyDetail.displayName = 'CaseStudyDetail';
+
 // Main Portfolio Component
 export default function Portfolio() {
   const [tokens, setTokens] = useState(createTokenSystem);
@@ -417,6 +865,7 @@ export default function Portfolio() {
   const [showTokenEditor, setShowTokenEditor] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
   const [navHovering, setNavHovering] = useState(false);
+  const [selectedCase, setSelectedCase] = useState(null);
 
   // Throttled mouse tracking
   useEffect(() => {
@@ -446,6 +895,13 @@ export default function Portfolio() {
     };
   }, []);
 
+  // Scroll to top when case study changes
+  useEffect(() => {
+    if (selectedCase !== null) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [selectedCase]);
+
   // Memoized callbacks
   const updateToken = useCallback((path, value) => {
     setTokens(prev => {
@@ -459,7 +915,6 @@ export default function Portfolio() {
         }
         current[keys[keys.length - 1]] = value;
       } else {
-        // Direct object assignment for spacing/radius
         current[path] = value;
       }
       
@@ -469,6 +924,15 @@ export default function Portfolio() {
 
   const handleSectionChange = useCallback((section) => {
     setActiveSection(section);
+    setSelectedCase(null);
+  }, []);
+
+  const handleCaseClick = useCallback((caseId) => {
+    setSelectedCase(caseId);
+  }, []);
+
+  const handleCaseClose = useCallback(() => {
+    setSelectedCase(null);
   }, []);
 
   const handleTokenEditorToggle = useCallback(() => {
@@ -758,32 +1222,15 @@ export default function Portfolio() {
     );
   }, [tokens, handleSectionChange, handleTokenEditorToggle]);
 
-  // Work Section - Memoized
+  // Work Section - Memoized with click handling
   const Work = useMemo(() => {
-    const caseStudies = [
-      {
-        id: 'truist',
-        client: 'Truist Financial',
-        title: 'Enterprise Banking Design System',
-        gradient: `linear-gradient(135deg, ${tokens.colors.accent.primary}, ${tokens.colors.accent.secondary})`,
-        tags: ['Design Tokens', 'Multi-Product', 'Enterprise'],
-      },
-      {
-        id: 'johnson',
-        client: 'Johnson Controls',
-        title: 'Industrial IoT Component Library',
-        gradient: `linear-gradient(135deg, ${tokens.colors.accent.secondary}, ${tokens.colors.accent.tertiary})`,
-        tags: ['Component Library', 'B2B SaaS', 'Atomic Design'],
-      },
-      {
-        id: 'anheuser',
-        client: 'Anheuser-Busch',
-        title: 'Multi-Brand Consumer Platform',
-        gradient: `linear-gradient(135deg, ${tokens.colors.accent.tertiary}, ${tokens.colors.accent.primary})`,
-        tags: ['Multi-Brand', 'Theming', 'E-commerce'],
-      },
-    ];
+    // If a case is selected, show detail view
+    if (selectedCase !== null) {
+      const study = CASE_STUDIES_DATA.find(s => s.id === selectedCase);
+      return <CaseStudyDetail study={study} tokens={tokens} onClose={handleCaseClose} />;
+    }
 
+    // Otherwise show grid view
     return (
       <div style={{
         padding: `${tokens.spacing[16]}px ${tokens.spacing[6]}px`,
@@ -812,9 +1259,10 @@ export default function Portfolio() {
             gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
             gap: `${tokens.spacing[6]}px`,
           }}>
-            {caseStudies.map((study, idx) => (
+            {CASE_STUDIES_DATA.map((study, idx) => (
               <div
                 key={study.id}
+                onClick={() => handleCaseClick(study.id)}
                 className={`animate-in stagger-${idx + 1}`}
                 style={{
                   background: tokens.colors.dark.elevated,
@@ -826,6 +1274,16 @@ export default function Portfolio() {
                   position: 'relative',
                   overflow: 'hidden',
                 }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.borderColor = tokens.colors.accent.primary;
+                  e.currentTarget.style.boxShadow = `0 12px 32px ${tokens.colors.accent.primary}20`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = tokens.colors.gray[900];
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               >
                 <div style={{
                   position: 'absolute',
@@ -833,7 +1291,7 @@ export default function Portfolio() {
                   left: 0,
                   right: 0,
                   height: '4px',
-                  background: study.gradient,
+                  background: `linear-gradient(135deg, ${tokens.colors.accent.primary}, ${tokens.colors.accent.secondary})`,
                 }} />
 
                 <div style={{
@@ -858,6 +1316,7 @@ export default function Portfolio() {
                   display: 'flex',
                   gap: `${tokens.spacing[2]}px`,
                   flexWrap: 'wrap',
+                  marginBottom: `${tokens.spacing[4]}px`,
                 }}>
                   {study.tags.map(tag => (
                     <span key={tag} style={{
@@ -871,13 +1330,25 @@ export default function Portfolio() {
                     </span>
                   ))}
                 </div>
+
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: `${tokens.spacing[2]}px`,
+                  color: tokens.colors.accent.primary,
+                  fontSize: `${tokens.typography.fontSize.sm}px`,
+                  fontWeight: '600',
+                }}>
+                  View Details
+                  <ChevronRight size={16} />
+                </div>
               </div>
             ))}
           </div>
         </div>
       </div>
     );
-  }, [tokens]);
+  }, [tokens, selectedCase, handleCaseClick, handleCaseClose]);
 
   // Lab Section - Memoized
   const DesignLab = useMemo(() => (
