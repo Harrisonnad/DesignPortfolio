@@ -398,28 +398,6 @@ const LoginModal = memo(({ tokens, onSuccess, onClose }) => {
             </button>
           </form>
 
-          <div style={{
-            marginTop: `${tokens.spacing[4]}px`,
-            padding: `${tokens.spacing[2]}px`,
-            background: `${tokens.colors.accent.primary}10`,
-            borderRadius: `${tokens.radius.sm}px`,
-            border: `1px solid ${tokens.colors.accent.primary}30`,
-          }}>
-            <p style={{
-              fontSize: `${tokens.typography.fontSize.sm}px`,
-              color: tokens.colors.gray[600],
-              textAlign: 'center',
-              margin: 0,
-            }}>
-              💡 Demo password: <span style={{ 
-                fontFamily: tokens.typography.fontFamily.mono,
-                color: tokens.colors.accent.primary,
-              }}>
-                {PORTFOLIO_PASSWORD}
-              </span>
-            </p>
-          </div>
-
           <button
             onClick={onClose}
             style={{
