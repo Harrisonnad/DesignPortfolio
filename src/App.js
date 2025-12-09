@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { ChevronRight, Code, Layers, Zap, Sliders, Play, ArrowLeft, Lock, Eye, EyeOff } from 'lucide-react';
+import truistScreenshot from './images/truist-showchanges.png'; 
+import emptyquizquestionpreview from './images/emptyquizquestionpreview.png';
+import quizpreviewwithquestionselection from './images/quizpreviewwithquestionselection.png'; 
+import quizquestionlistingwithaisidepanel from './images/quizquestionlistingwithaisidepanel.png';
+import quizquestionlistingwithonequestion from './images/quizquestionlistingwithonequestion.png';
+import customabitheme from './images/customabitheme.png';
 
 // DESIGN TOKEN SYSTEM - Outside component to prevent recreation
 const createTokenSystem = () => ({
@@ -74,118 +80,144 @@ const CASE_STUDIES_DATA = [
   {
     id: 'truist',
     client: 'Truist Financial',
-    title: 'Enterprise Banking Design System',
-    role: 'Lead Design Systems Engineer',
-    tags: ['Design Tokens', 'Multi-Product', 'Enterprise'],
-    challenge: 'Truist needed a unified design language across 15+ banking products following their merger, with inconsistent UI patterns creating user confusion and development inefficiencies.',
-    solution: 'Built a comprehensive token architecture from scratch, establishing primitive and semantic layers for color, typography, spacing, and motion. Created a systematic approach to brand consistency while allowing product-specific customization.',
+    title: 'Enterprise Document Management System',
+    role: 'Lead UI/UX Engineer',
+    tags: ['Design Tokens', 'Version Control', 'Enterprise SaaS'],
+    challenge: 'Truist Acadia users struggled with maintaining comprehensive document history, resulting in confusion during process updates and lost institutional knowledge. Without visibility into historical changes, teams could not understand the rationale behind modifications or track the evolution of critical compliance documents. This created significant risk in regulated banking environments where audit trails and change justification are paramount.',
+    solution: 'Designed and engineered a comprehensive "Show Changes" feature that captures timestamped document revisions with granular change tracking. Implemented intelligent text highlighting powered by the design token system, utilizing color, spacing, and typography tokens to create clear visual differentiation between additions, removals, and modifications. Built a scalable revision history architecture that maintains context across document lifecycles while ensuring performance at enterprise scale.',
     impact: [
-      'Reduced design-to-dev handoff time by 40%',
-      'Achieved 100% WCAG AA compliance across token system',
-      'Enabled 3 product teams to ship features 2x faster',
-      'Documented 200+ design decisions in token metadata',
+      'Established complete audit trail preserving institutional knowledge across all process changes',
+      'Increased user engagement with process improvement workflows by 35%',
+      'Reduced development time by 60% through systematic reuse of established token architecture',
+      'Enhanced regulatory compliance with comprehensive change documentation',
+      'Enabled teams to confidently iterate on processes with full historical context',
+      'Accelerated onboarding for new team members through accessible change history',
     ],
     implementation: {
-      before: `// Before: Inconsistent spacing
-padding: 18px;
-margin: 22px;
-gap: 15px;`,
-      after: `// After: Systematic tokens
-padding: var(--space-4); // 24px
-margin: var(--space-5); // 32px  
-gap: var(--space-3); // 16px`,
-      code: `const tokens = {
-  primitive: { 
-    blue500: '#3B82F6' 
-  },
-  semantic: { 
-    interactive: 'blue500',
-    buttonPrimary: 'interactive'
-  }
-};
-
-// Figma Variables → Code
-<Button color={tokens.semantic.buttonPrimary} />`,
+      hasScreenshot: true,
+      screenshots: [
+        {
+          url: truistScreenshot,
+          alt: 'Truist Acadia document management interface showing version control with "Show Changes" feature, displaying revision tracking, approval workflows, and color-coded change indicators',
+          caption: 'Version control interface with color-coded change indicators'
+        }
+      ],
+      screenshotAlt: 'Truist Acadia document management interface showing version control with "Show Changes" feature, displaying revision tracking, approval workflows, and color-coded change indicators',
+      description: 'The design system powers Truist Acadia\'s internal policy management and compliance tracking platform. The "Show Changes" feature leverages systematic color tokens (green for additions, red for removals, purple for modifications) and consistent spacing tokens to create an intuitive, accessible change review experience across all document types.',
+      features: [
+        {
+          title: 'Token-Driven Change Visualization',
+          description: 'Utilizes semantic color tokens for consistent change indicators: additions (tertiary/success), removals (secondary/warning), and modifications (primary). Typography tokens ensure readable diff comparisons across all viewport sizes.',
+        },
+        {
+          title: 'Temporal Change Tracking',
+          description: 'Timestamps every revision with full context including document ID, owner, collection, review schedules, and effective dates. Enables complete audit trail for compliance and regulatory requirements.',
+        },
+        {
+          title: 'Systematic Component Reuse',
+          description: 'Built on established token system enabling rapid feature development. Spacing tokens ensure consistent padding and margins, while typography tokens maintain hierarchy across all change states.',
+        },
+      ],
     }
   },
-  {
+ {
     id: 'johnson',
     client: 'Johnson Controls',
-    title: 'Industrial IoT Component Library',
+    title: 'AI-Powered Quiz Platform Redesign',
     role: 'Senior UI/UX Engineer',
-    tags: ['Component Library', 'B2B SaaS', 'Atomic Design'],
-    challenge: 'Complex building automation dashboards required highly reusable components that could handle diverse data visualizations while maintaining consistency. Design debt from rapid feature development needed systematic resolution.',
-    solution: 'Implemented atomic design methodology (atoms → molecules → organisms) with strict modularity principles. Created 50+ base components with variant systems, establishing clear composition patterns and naming conventions.',
-    impact: [
-      'Built 80% of new features using existing components',
-      'Reduced component sprawl from 200+ to 50 core components',
-      'Established naming conventions adopted by 12-person engineering team',
-      'Created visual regression testing framework',
+    tags: ['Product Design', 'AI Integration', 'User Experience'],
+    challenge: 'Legacy quiz editor lacked preview capabilities and required time-intensive manual question creation, resulting in inconsistent content quality and slow production cycles.',
+    solution: 'Redesigned the quiz editing experience with a dual-pane live preview interface and implemented the product\'s first AI-powered feature to generate contextually relevant quiz questions.',
+    impact: [ 
+      '45% reduction in quiz creation time',
+      '89% AI recommendation adoption rate', 
+      'Became the model for AI integration across product',
+      'Quiz generation rate improved by 60%'
     ],
     implementation: {
-      atomic: {
-        atoms: 'Button, Input, Label, Icon',
-        molecules: 'FormField (Label + Input + Error)',
-        organisms: 'DataCard (FormField[] + Actions)',
+      hasScreenshot: true,
+      screenshots: [ 
+        {
+          url: quizquestionlistingwithonequestion,
+          alt: 'Johnson Controls AI-powered quiz platform interface showing question listing with one question.',
+          caption: 'Quiz question listing with one question'
+        },
+        {
+          url: emptyquizquestionpreview,
+          alt: 'Johnson Controls AI-powered quiz platform interface showing empty quiz question preview.',
+          caption: 'Empty quiz question preview'
+        },
+        {
+          url: quizpreviewwithquestionselection,
+          alt: 'Johnson Controls AI-powered quiz platform interface showing quiz preview with question selection.',
+          caption: 'Quiz preview with question selection'
+        },
+        {
+          url: quizquestionlistingwithaisidepanel,
+          alt: 'Johnson Controls AI-powered quiz platform interface showing quiz question listing with AI side panel.',
+          caption: 'Quiz question listing with AI side panel'
+        }
+        
+       ],
+      description: 'The redesign introduced a live preview window that updates in real-time as users create and modify quiz questions, providing immediate visual feedback. The AI-powered question generation feature analyzes the provided content and learning objectives to suggest relevant questions, significantly reducing manual effort and enhancing content quality.',
+      features: [ 
+        {
+          title: 'AI-Powered Question Generation',
+          description: 'Contextual analysis and suggestions based on learning objectives and content.',
+        },
+        {
+          title: 'Real-Time Preview Window',
+          description: 'Instant feedback on question appearance and functionality during creation.',
+        },
+        {
+          title: 'Flexible Question Framework',
+          description: 'Supports multiple question types with dynamic input fields and validation.',
+        }
+      ],
+    }
+  },
+ {
+  id: 'anheuser',
+  client: 'Anheuser-Busch',
+  title: 'White-Label Theming & Brand Customization Platform',
+  role: 'Design Systems Lead',
+  tags: ['Design Tokens', 'Theming', 'Enterprise Customization'],
+  challenge: 'Acadia\'s enterprise clients needed their internal tools to reflect their corporate branding to drive adoption and reinforce the platform as part of their organization\'s official tooling ecosystem. The existing design system lacked the flexibility for client-specific customization, forcing all users into a generic interface that felt disconnected from their company\'s visual identity. This created adoption friction as employees couldn\'t immediately recognize the platform as an approved corporate tool, leading to skepticism and reduced engagement.',
+  solution: 'Architected a comprehensive white-label theming system built on extensible design tokens, enabling enterprise clients to customize colors, typography, logos, and iconography while maintaining accessibility and usability standards. Implemented Anheuser-Busch as the flagship client showcase, creating a fully branded experience with custom icon sets and color palettes aligned to their corporate identity guidelines. Established a brand adoption framework with guardrails ensuring customizations never compromise WCAG compliance or core product functionality.',
+  impact: [
+    'Enabled enterprise clients to deploy fully branded instances in under 2 hours',
+    'Increased Anheuser-Busch employee adoption rate by 73% within first quarter',
+    'Generated new revenue stream with premium white-label offering for enterprise tier',
+    'Reduced client customization requests by 85% through self-service theme editor',
+    'Established reusable theming architecture adopted across 12+ enterprise clients',
+    'Maintained 100% WCAG AA compliance across all custom theme configurations',
+  ],
+  implementation: {
+    hasScreenshot: true,
+    screenshots: [
+      {
+        url: customabitheme,
+        alt: 'Anheuser-Busch branded Acadia interface showing custom logo, color scheme, and iconography',
+        caption: 'Fully customized Anheuser-Busch theme with corporate branding and custom icon set'
+      }
+    ],
+    description: 'The white-label theming system leverages a sophisticated token architecture where primitive tokens (base colors, spacing) remain constant while semantic tokens (brand colors, interactive states) dynamically adapt to client configurations. The Anheuser-Busch implementation features their signature red and gold color palette, custom eagle iconography, and corporate typography—creating an immediately recognizable branded experience that integrates seamlessly with their existing internal tools.',
+    features: [
+      {
+        title: 'Dynamic Token Architecture',
+        description: 'Built extensible token system separating primitive tokens (foundations) from semantic tokens (brand-specific). Clients customize semantic layer through intuitive theme editor while system automatically generates accessible color combinations, hover states, and focus indicators that meet WCAG standards.',
       },
-      code: `// Atomic Component Pattern
-interface ButtonProps {
-  variant: 'primary' | 'secondary';
-  size: 'sm' | 'md' | 'lg';
-}
-
-const Button: FC<ButtonProps> = ({ 
-  variant, 
-  size, 
-  children 
-}) => (
-  <button className={cx(
-    baseStyles,
-    variantStyles[variant],
-    sizeStyles[size]
-  )}>
-    {children}
-  </button>
-);`,
-    }
-  },
-  {
-    id: 'anheuser',
-    client: 'Anheuser-Busch',
-    title: 'Multi-Brand Consumer Platform',
-    role: 'Design Systems Lead',
-    tags: ['Multi-Brand', 'Theming', 'E-commerce'],
-    challenge: 'E-commerce platform needed to support 8+ beer brands with distinct visual identities while sharing core component logic. Required seamless switching between brand themes without code duplication.',
-    solution: 'Designed a flexible variant system using CSS variables and theme tokens. Established brand-agnostic component architecture with theme override capabilities. Led cross-functional adoption across design, engineering, and product teams.',
-    impact: [
-      'Launched 8 brand experiences using single component library',
-      'Reduced brand theme implementation from 2 weeks to 2 days',
-      'Mentored 4 junior engineers on design system best practices',
-      'Achieved 15% sprint bug reduction through systematic QA',
+      {
+        title: 'Custom Logo & Icon System',
+        description: 'Supports client-specific logo placement and custom icon libraries. Anheuser-Busch implementation includes their corporate logo in navigation, custom eagle iconography for key features, and brand-aligned illustrations. Icon system maintains consistent sizing and optical alignment across all customization scenarios.',
+      },
+      {
+        title: 'Brand Adoption Guardrails',
+        description: 'Automated validation ensures all theme customizations maintain minimum contrast ratios, readable typography scales, and proper spacing relationships. Real-time preview shows branded experience across light/dark modes before deployment, preventing accessibility violations while maximizing brand expression.',
+      },
     ],
-    implementation: {
-      brands: ['Budweiser', 'Stella Artois', 'Corona', 'Michelob Ultra'],
-      code: `// Multi-brand theming system
-const themes = {
-  budweiser: { 
-    primary: '#E00122',
-    secondary: '#000000'
-  },
-  stella: { 
-    primary: '#C8AA6E',
-    secondary: '#1A1A1A'
-  },
-  corona: {
-    primary: '#FFD700',
-    secondary: '#005EB8'
   }
-};
-
-<ThemeProvider theme={themes[currentBrand]}>
-  <App />
-</ThemeProvider>`,
-    }
-  },
+}
 ];
 
 // Memoized Background Gradient Component
@@ -398,6 +430,28 @@ const LoginModal = memo(({ tokens, onSuccess, onClose }) => {
             </button>
           </form>
 
+          <div style={{
+            marginTop: `${tokens.spacing[4]}px`,
+            padding: `${tokens.spacing[2]}px`,
+            background: `${tokens.colors.accent.primary}10`,
+            borderRadius: `${tokens.radius.sm}px`,
+            border: `1px solid ${tokens.colors.accent.primary}30`,
+          }}>
+            <p style={{
+              fontSize: `${tokens.typography.fontSize.sm}px`,
+              color: tokens.colors.gray[600],
+              textAlign: 'center',
+              margin: 0,
+            }}>
+              💡 Demo password: <span style={{ 
+                fontFamily: tokens.typography.fontFamily.mono,
+                color: tokens.colors.accent.primary,
+              }}>
+                {PORTFOLIO_PASSWORD}
+              </span>
+            </p>
+          </div>
+
           <button
             onClick={onClose}
             style={{
@@ -550,7 +604,7 @@ const TokenEditor = memo(({
     top: 0,
     right: showTokenEditor ? 0 : '-100%',
     width: 'min(100%, 420px)',
-    height: '100%',
+    height: '100vh',
     background: tokens.colors.dark.elevated,
     borderLeft: `1px solid ${tokens.colors.gray[800]}`,
     padding: `${tokens.spacing[4]}px`,
@@ -783,6 +837,7 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
       padding: `${tokens.spacing[3]}px`,
       marginTop: `${tokens.spacing[2]}px`,
       overflow: 'auto',
+      maxWidth: '100%',
     }}>
       <div style={{
         fontFamily: tokens.typography.fontFamily.mono,
@@ -800,6 +855,8 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
         margin: 0,
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
+        maxWidth: '100%',
+        overflowWrap: 'anywhere',
       }}>
         {children}
       </pre>
@@ -951,145 +1008,259 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
             fontWeight: '800',
             marginBottom: `${tokens.spacing[4]}px`,
           }}>
-            Technical Implementation
+            {study.implementation.hasScreenshot ? 'Design System in Production' : 'Technical Implementation'}
           </h2>
 
-          {study.implementation.before && (
-            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[6]}px` }}>
-              <h4 style={{
-                fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
-                fontWeight: '600',
-                marginBottom: `${tokens.spacing[3]}px`,
-              }}>
-                Token System Transformation
-              </h4>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
-                gap: `${tokens.spacing[3]}px`,
-              }}>
-                <div>
-                  <div style={{
-                    fontSize: `${tokens.typography.fontSize.sm}px`,
-                    color: tokens.colors.gray[600],
-                    marginBottom: `${tokens.spacing[2]}px`,
-                  }}>
-                    Before
-                  </div>
-                  <CodeBlock language="css">
-                    {study.implementation.before}
-                  </CodeBlock>
-                </div>
-                <div>
-                  <div style={{
-                    fontSize: `${tokens.typography.fontSize.sm}px`,
-                    color: tokens.colors.gray[600],
-                    marginBottom: `${tokens.spacing[2]}px`,
-                  }}>
-                    After
-                  </div>
-                  <CodeBlock language="css">
-                    {study.implementation.after}
-                  </CodeBlock>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {study.implementation.atomic && (
-            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[6]}px` }}>
-              <h4 style={{
-                fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
-                fontWeight: '600',
-                marginBottom: `${tokens.spacing[3]}px`,
-              }}>
-                Atomic Design Hierarchy
-              </h4>
-              <div style={{
-                background: tokens.colors.dark.elevated,
+          {study.implementation.hasScreenshot ? (
+            <>
+              <div style={{ marginBottom: `${tokens.spacing[6]}px` }}>
+      {/* Multiple Screenshots Grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))',
+        gap: `${tokens.spacing[4]}px`,
+        marginBottom: `${tokens.spacing[4]}px`,
+      }}>
+        {study.implementation.screenshots.map((screenshot, idx) => (
+          <div
+            key={idx}
+            className="animate-in"
+            style={{
+              background: tokens.colors.dark.elevated,
+              borderRadius: `${tokens.radius.lg}px`,
+              padding: `${tokens.spacing[4]}px`,
+              border: `1px solid ${tokens.colors.gray[900]}`,
+              overflow: 'hidden',
+            }}
+          >
+            <img 
+              src={screenshot.url}
+              alt={screenshot.alt}
+              style={{
+                width: '100%',
+                height: 'auto',
                 borderRadius: `${tokens.radius.md}px`,
-                padding: `${tokens.spacing[3]}px`,
-                marginBottom: `${tokens.spacing[3]}px`,
+                display: 'block',
+                border: `1px solid ${tokens.colors.gray[800]}`,
+                maxWidth: '100%',
+                marginBottom: screenshot.caption ? `${tokens.spacing[3]}px` : 0,
+              }}
+            />
+            {screenshot.caption && (
+              <p style={{
+                fontSize: `clamp(${tokens.typography.fontSize.sm}px, 2.5vw, ${tokens.typography.fontSize.base}px)`,
+                color: tokens.colors.gray[600],
+                lineHeight: '1.6',
+                textAlign: 'center',
+                margin: 0,
               }}>
-                {Object.entries(study.implementation.atomic).map(([key, value]) => (
-                  <div key={key} style={{
-                    fontFamily: tokens.typography.fontFamily.mono,
-                    fontSize: `clamp(${tokens.typography.fontSize.sm}px, 2.5vw, ${tokens.typography.fontSize.base}px)`,
-                    marginBottom: `${tokens.spacing[2]}px`,
-                  }}>
-                    <span style={{ 
-                      color: tokens.colors.accent.primary,
-                      fontWeight: '600',
-                    }}>
-                      {key.charAt(0).toUpperCase() + key.slice(1)}
-                    </span>
-                    {' → '}
-                    <span style={{ color: tokens.colors.gray[600] }}>
-                      {value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {study.implementation.brands && (
-            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[6]}px` }}>
-              <h4 style={{
-                fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
-                fontWeight: '600',
-                marginBottom: `${tokens.spacing[3]}px`,
-              }}>
-                Multi-Brand Theme System
-              </h4>
-              <div style={{
-                background: tokens.colors.dark.elevated,
-                borderRadius: `${tokens.radius.md}px`,
-                padding: `${tokens.spacing[3]}px`,
-                marginBottom: `${tokens.spacing[3]}px`,
-              }}>
-                <div style={{
-                  fontSize: `${tokens.typography.fontSize.sm}px`,
-                  color: tokens.colors.gray[600],
-                  marginBottom: `${tokens.spacing[2]}px`,
-                }}>
-                  Brands Supported:
-                </div>
-                <div style={{ 
-                  display: 'flex', 
-                  gap: `${tokens.spacing[2]}px`, 
-                  flexWrap: 'wrap',
-                  marginBottom: `${tokens.spacing[3]}px`,
-                }}>
-                  {study.implementation.brands.map(brand => (
-                    <span key={brand} style={{
-                      padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                      background: tokens.colors.dark.bg,
-                      border: `1px solid ${tokens.colors.gray[800]}`,
-                      borderRadius: `${tokens.radius.sm}px`,
-                      fontSize: `${tokens.typography.fontSize.sm}px`,
-                      fontWeight: '500',
-                    }}>
-                      {brand}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className="animate-in">
-            <h4 style={{
-              fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
-              fontWeight: '600',
-              marginBottom: `${tokens.spacing[3]}px`,
-            }}>
-              Implementation Code
-            </h4>
-            <CodeBlock language="tsx">
-              {study.implementation.code}
-            </CodeBlock>
+                {screenshot.caption}
+              </p>
+            )}
           </div>
+        ))}
+                  {study.implementation.description && (
+                    <p style={{
+                      marginTop: `${tokens.spacing[4]}px`,
+                      fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.lg}px)`,
+                      color: tokens.colors.gray[600],
+                      lineHeight: '1.7',
+                    }}>
+                      {study.implementation.description}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {study.implementation.features && (
+                <div style={{ marginBottom: `${tokens.spacing[6]}px` }}>
+                  <h3 style={{
+                    fontFamily: tokens.typography.fontFamily.display,
+                    fontSize: `clamp(${tokens.typography.fontSize.xl}px, 4vw, ${tokens.typography.fontSize['2xl']}px)`,
+                    fontWeight: '700',
+                    marginBottom: `${tokens.spacing[4]}px`,
+                  }}>
+                    Key Features
+                  </h3>
+                  <div style={{
+                    display: 'grid',
+                    gap: `${tokens.spacing[4]}px`,
+                  }}>
+                    {study.implementation.features.map((feature, idx) => (
+                      <div
+                        key={idx}
+                        className="animate-in"
+                        style={{
+                          background: tokens.colors.dark.elevated,
+                          borderRadius: `${tokens.radius.md}px`,
+                          padding: `${tokens.spacing[4]}px`,
+                          border: `1px solid ${tokens.colors.gray[900]}`,
+                        }}
+                      >
+                        <h4 style={{
+                          fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
+                          fontWeight: '600',
+                          marginBottom: `${tokens.spacing[2]}px`,
+                          color: tokens.colors.accent.primary,
+                        }}>
+                          {feature.title}
+                        </h4>
+                        <p style={{
+                          fontSize: `clamp(${tokens.typography.fontSize.base}px, 2.5vw, ${tokens.typography.fontSize.lg}px)`,
+                          color: tokens.colors.gray[600],
+                          lineHeight: '1.7',
+                          margin: 0,
+                        }}>
+                          {feature.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {study.implementation.before && (
+                <div className="animate-in" style={{ marginBottom: `${tokens.spacing[6]}px` }}>
+                  <h4 style={{
+                    fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
+                    fontWeight: '600',
+                    marginBottom: `${tokens.spacing[3]}px`,
+                  }}>
+                    Token System Transformation
+                  </h4>
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+                    gap: `${tokens.spacing[3]}px`,
+                  }}>
+                    <div>
+                      <div style={{
+                        fontSize: `${tokens.typography.fontSize.sm}px`,
+                        color: tokens.colors.gray[600],
+                        marginBottom: `${tokens.spacing[2]}px`,
+                      }}>
+                        Before
+                      </div>
+                      <CodeBlock language="css">
+                        {study.implementation.before}
+                      </CodeBlock>
+                    </div>
+                    <div>
+                      <div style={{
+                        fontSize: `${tokens.typography.fontSize.sm}px`,
+                        color: tokens.colors.gray[600],
+                        marginBottom: `${tokens.spacing[2]}px`,
+                      }}>
+                        After
+                      </div>
+                      <CodeBlock language="css">
+                        {study.implementation.after}
+                      </CodeBlock>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {study.implementation.atomic && (
+                <div className="animate-in" style={{ marginBottom: `${tokens.spacing[6]}px` }}>
+                  <h4 style={{
+                    fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
+                    fontWeight: '600',
+                    marginBottom: `${tokens.spacing[3]}px`,
+                  }}>
+                    Atomic Design Hierarchy
+                  </h4>
+                  <div style={{
+                    background: tokens.colors.dark.elevated,
+                    borderRadius: `${tokens.radius.md}px`,
+                    padding: `${tokens.spacing[3]}px`,
+                    marginBottom: `${tokens.spacing[3]}px`,
+                  }}>
+                    {Object.entries(study.implementation.atomic).map(([key, value]) => (
+                      <div key={key} style={{
+                        fontFamily: tokens.typography.fontFamily.mono,
+                        fontSize: `clamp(${tokens.typography.fontSize.sm}px, 2.5vw, ${tokens.typography.fontSize.base}px)`,
+                        marginBottom: `${tokens.spacing[2]}px`,
+                      }}>
+                        <span style={{ 
+                          color: tokens.colors.accent.primary,
+                          fontWeight: '600',
+                        }}>
+                          {key.charAt(0).toUpperCase() + key.slice(1)}
+                        </span>
+                        {' → '}
+                        <span style={{ color: tokens.colors.gray[600] }}>
+                          {value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {study.implementation.brands && (
+                <div className="animate-in" style={{ marginBottom: `${tokens.spacing[6]}px` }}>
+                  <h4 style={{
+                    fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
+                    fontWeight: '600',
+                    marginBottom: `${tokens.spacing[3]}px`,
+                  }}>
+                    Multi-Brand Theme System
+                  </h4>
+                  <div style={{
+                    background: tokens.colors.dark.elevated,
+                    borderRadius: `${tokens.radius.md}px`,
+                    padding: `${tokens.spacing[3]}px`,
+                    marginBottom: `${tokens.spacing[3]}px`,
+                  }}>
+                    <div style={{
+                      fontSize: `${tokens.typography.fontSize.sm}px`,
+                      color: tokens.colors.gray[600],
+                      marginBottom: `${tokens.spacing[2]}px`,
+                    }}>
+                      Brands Supported:
+                    </div>
+                    <div style={{ 
+                      display: 'flex', 
+                      gap: `${tokens.spacing[2]}px`, 
+                      flexWrap: 'wrap',
+                      marginBottom: `${tokens.spacing[3]}px`,
+                    }}>
+                      {study.implementation.brands.map(brand => (
+                        <span key={brand} style={{
+                          padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                          background: tokens.colors.dark.bg,
+                          border: `1px solid ${tokens.colors.gray[800]}`,
+                          borderRadius: `${tokens.radius.sm}px`,
+                          fontSize: `${tokens.typography.fontSize.sm}px`,
+                          fontWeight: '500',
+                        }}>
+                          {brand}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {study.implementation.code && (
+                <div className="animate-in">
+                  <h4 style={{
+                    fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
+                    fontWeight: '600',
+                    marginBottom: `${tokens.spacing[3]}px`,
+                  }}>
+                    Implementation Code
+                  </h4>
+                  <CodeBlock language="tsx">
+                    {study.implementation.code}
+                  </CodeBlock>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>
@@ -1230,13 +1401,19 @@ export default function Portfolio() {
       box-sizing: border-box;
     }
     
+    /* Critical overflow fixes */
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    
     body {
       font-family: ${tokens.typography.fontFamily.body};
       background: ${tokens.colors.dark.bg};
       color: #FFFFFF;
-      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       min-width: 320px;
+      position: relative;
     }
     
     ::selection {
@@ -1343,15 +1520,18 @@ export default function Portfolio() {
                 className="animate-in stagger-1"
                 style={{
                   fontFamily: tokens.typography.fontFamily.display,
-                  fontSize: `clamp(${tokens.typography.fontSize['2xl']}px, 7vw, ${tokens.typography.fontSize['4xl']}px)`,
+                  fontSize: `clamp(${tokens.typography.fontSize['3xl']}px, 8vw, ${tokens.typography.fontSize['5xl']}px)`,
                   fontWeight: '800',
-                  lineHeight: '1.1',
+                  lineHeight: '1.2',
                   marginBottom: `${tokens.spacing[4]}px`,
                   background: `linear-gradient(135deg, #FFFFFF, ${tokens.colors.gray[600]})`,
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  wordWrap: 'break-word'
+                  overflowWrap: 'break-word',
+                  wordWrap: 'break-word',
+                  hyphens: 'auto',
+                  maxWidth: '100%',
                 }}>
                 Engineering precision meets creative vision
               </h1>
