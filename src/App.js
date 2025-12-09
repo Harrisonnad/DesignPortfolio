@@ -1648,7 +1648,7 @@ export default function Portfolio() {
               position: 'relative',
               height: '600px',
               flex: '1 1 400px',
-              minWidth: '400px',
+              maxWidth: '300px',
             }}>
               <div style={{
                 position: 'absolute',
