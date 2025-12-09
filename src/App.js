@@ -218,7 +218,6 @@ const LoginModal = memo(({ tokens, onSuccess, onClose }) => {
     e.preventDefault();
     
     if (password === PORTFOLIO_PASSWORD) {
-      // Store in sessionStorage so it persists during the session
       sessionStorage.setItem('portfolioUnlocked', 'true');
       onSuccess();
     } else {
@@ -242,14 +241,15 @@ const LoginModal = memo(({ tokens, onSuccess, onClose }) => {
     justifyContent: 'center',
     zIndex: 2000,
     animation: 'fadeIn 300ms ease-out',
-  }), []);
+    padding: `${tokens.spacing[4]}px`,
+  }), [tokens]);
 
   const modalStyle = useMemo(() => ({
     background: tokens.colors.dark.elevated,
     borderRadius: `${tokens.radius.xl}px`,
-    padding: `${tokens.spacing[8]}px`,
+    padding: `${tokens.spacing[6]}px`,
     maxWidth: '500px',
-    width: '90%',
+    width: '100%',
     border: `1px solid ${tokens.colors.gray[800]}`,
     boxShadow: `0 20px 60px rgba(0, 0, 0, 0.5)`,
     animation: isShaking ? 'shake 0.5s' : 'slideUp 400ms ease-out',
@@ -281,12 +281,11 @@ const LoginModal = memo(({ tokens, onSuccess, onClose }) => {
       
       <div style={overlayStyle} onClick={onClose}>
         <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
-          {/* Lock Icon */}
           <div style={{
             width: '80px',
             height: '80px',
             margin: '0 auto',
-            marginBottom: `${tokens.spacing[6]}px`,
+            marginBottom: `${tokens.spacing[4]}px`,
             background: `linear-gradient(135deg, ${tokens.colors.accent.primary}, ${tokens.colors.accent.secondary})`,
             borderRadius: '50%',
             display: 'flex',
@@ -296,31 +295,28 @@ const LoginModal = memo(({ tokens, onSuccess, onClose }) => {
             <Lock size={40} color="#FFFFFF" />
           </div>
 
-          {/* Title */}
           <h2 style={{
             fontFamily: tokens.typography.fontFamily.display,
-            fontSize: `${tokens.typography.fontSize['3xl']}px`,
+            fontSize: `clamp(${tokens.typography.fontSize['2xl']}px, 5vw, ${tokens.typography.fontSize['3xl']}px)`,
             fontWeight: '800',
             textAlign: 'center',
-            marginBottom: `${tokens.spacing[3]}px`,
+            marginBottom: `${tokens.spacing[2]}px`,
           }}>
             Protected Content
           </h2>
 
-          {/* Description */}
           <p style={{
-            fontSize: `${tokens.typography.fontSize.lg}px`,
+            fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.lg}px)`,
             color: tokens.colors.gray[600],
             textAlign: 'center',
-            marginBottom: `${tokens.spacing[6]}px`,
+            marginBottom: `${tokens.spacing[4]}px`,
             lineHeight: '1.6',
           }}>
             These case studies contain confidential client work. Please enter the password to view details.
           </p>
 
-          {/* Form */}
           <form onSubmit={handleSubmit}>
-            <div style={{ position: 'relative', marginBottom: `${tokens.spacing[4]}px` }}>
+            <div style={{ position: 'relative', marginBottom: `${tokens.spacing[3]}px` }}>
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
@@ -332,7 +328,7 @@ const LoginModal = memo(({ tokens, onSuccess, onClose }) => {
                 autoFocus
                 style={{
                   width: '100%',
-                  padding: `${tokens.spacing[4]}px ${tokens.spacing[12]}px ${tokens.spacing[4]}px ${tokens.spacing[4]}px`,
+                  padding: `${tokens.spacing[3]}px ${tokens.spacing[8]}px ${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
                   background: tokens.colors.dark.surface,
                   border: `2px solid ${error ? tokens.colors.accent.secondary : tokens.colors.gray[800]}`,
                   borderRadius: `${tokens.radius.md}px`,
@@ -350,13 +346,12 @@ const LoginModal = memo(({ tokens, onSuccess, onClose }) => {
                 }}
               />
               
-              {/* Toggle Password Visibility */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 style={{
                   position: 'absolute',
-                  right: `${tokens.spacing[4]}px`,
+                  right: `${tokens.spacing[3]}px`,
                   top: '50%',
                   transform: 'translateY(-50%)',
                   background: 'none',
@@ -372,24 +367,22 @@ const LoginModal = memo(({ tokens, onSuccess, onClose }) => {
               </button>
             </div>
 
-            {/* Error Message */}
             {error && (
               <div style={{
                 color: tokens.colors.accent.secondary,
                 fontSize: `${tokens.typography.fontSize.sm}px`,
-                marginBottom: `${tokens.spacing[4]}px`,
+                marginBottom: `${tokens.spacing[3]}px`,
                 textAlign: 'center',
               }}>
                 {error}
               </div>
             )}
 
-            {/* Submit Button */}
             <button
               type="submit"
               style={{
                 width: '100%',
-                padding: `${tokens.spacing[4]}px`,
+                padding: `${tokens.spacing[3]}px`,
                 background: `linear-gradient(135deg, ${tokens.colors.accent.primary}, ${tokens.colors.accent.secondary})`,
                 border: 'none',
                 borderRadius: `${tokens.radius.md}px`,
@@ -400,38 +393,45 @@ const LoginModal = memo(({ tokens, onSuccess, onClose }) => {
                 transition: `all ${tokens.animation.normal}`,
                 boxShadow: `0 4px 24px ${tokens.colors.accent.primary}40`,
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = `0 8px 32px ${tokens.colors.accent.primary}60`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = `0 4px 24px ${tokens.colors.accent.primary}40`;
-              }}
             >
               Unlock Case Studies
             </button>
           </form>
 
-          {/* Cancel Button */}
+          <div style={{
+            marginTop: `${tokens.spacing[4]}px`,
+            padding: `${tokens.spacing[2]}px`,
+            background: `${tokens.colors.accent.primary}10`,
+            borderRadius: `${tokens.radius.sm}px`,
+            border: `1px solid ${tokens.colors.accent.primary}30`,
+          }}>
+            <p style={{
+              fontSize: `${tokens.typography.fontSize.sm}px`,
+              color: tokens.colors.gray[600],
+              textAlign: 'center',
+              margin: 0,
+            }}>
+              💡 Demo password: <span style={{ 
+                fontFamily: tokens.typography.fontFamily.mono,
+                color: tokens.colors.accent.primary,
+              }}>
+                {PORTFOLIO_PASSWORD}
+              </span>
+            </p>
+          </div>
+
           <button
             onClick={onClose}
             style={{
               width: '100%',
-              padding: `${tokens.spacing[3]}px`,
+              padding: `${tokens.spacing[2]}px`,
               background: 'transparent',
               border: 'none',
               color: tokens.colors.gray[600],
               fontSize: `${tokens.typography.fontSize.sm}px`,
               cursor: 'pointer',
-              marginTop: `${tokens.spacing[4]}px`,
+              marginTop: `${tokens.spacing[3]}px`,
               transition: `all ${tokens.animation.normal}`,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#FFFFFF';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = tokens.colors.gray[600];
             }}
           >
             Cancel
@@ -459,7 +459,7 @@ const Navigation = memo(({
     background: `${tokens.colors.dark.bg}f0`,
     backdropFilter: 'blur(20px)',
     borderBottom: `1px solid ${tokens.colors.gray[900]}`,
-    padding: `${tokens.spacing[4]}px ${tokens.spacing[6]}px`,
+    padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
     zIndex: 100,
     transition: `all ${tokens.animation.normal}`,
     boxShadow: navHovering ? `0 4px 24px ${tokens.colors.accent.primary}20` : 'none',
@@ -467,7 +467,7 @@ const Navigation = memo(({
 
   const logoStyle = useMemo(() => ({
     fontFamily: tokens.typography.fontFamily.display,
-    fontSize: `${tokens.typography.fontSize['2xl']}px`,
+    fontSize: `clamp(${tokens.typography.fontSize.xl}px, 4vw, ${tokens.typography.fontSize['2xl']}px)`,
     fontWeight: '800',
     background: `linear-gradient(135deg, ${tokens.colors.accent.primary}, ${tokens.colors.accent.secondary})`,
     backgroundClip: 'text',
@@ -482,14 +482,15 @@ const Navigation = memo(({
     background: activeSection === section ? `${tokens.colors.gray[900]}80` : 'none',
     border: 'none',
     fontFamily: tokens.typography.fontFamily.body,
-    fontSize: `${tokens.typography.fontSize.base}px`,
+    fontSize: `clamp(${tokens.typography.fontSize.sm}px, 2.5vw, ${tokens.typography.fontSize.base}px)`,
     fontWeight: '600',
     color: activeSection === section ? tokens.colors.accent.primary : tokens.colors.gray[600],
     cursor: 'pointer',
-    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+    padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
     borderRadius: `${tokens.radius.sm}px`,
     transition: `all ${tokens.animation.normal}`,
     position: 'relative',
+    whiteSpace: 'nowrap',
   }), [activeSection, tokens]);
 
   const underlineStyle = useMemo(() => ({
@@ -513,8 +514,10 @@ const Navigation = memo(({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: `${tokens.spacing[2]}px`,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing[3]}px` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing[2]}px`, flexWrap: 'wrap' }}>
           <div style={logoStyle}>HN</div>
           {isUnlocked && (
             <div style={{
@@ -529,11 +532,15 @@ const Navigation = memo(({
               gap: `${tokens.spacing[1]}px`,
             }}>
               <Lock size={12} />
-              Unlocked
+              <span style={{ display: 'inline' }}>Unlocked</span>
             </div>
           )}
         </div>
-        <div style={{ display: 'flex', gap: `${tokens.spacing[6]}px` }}>
+        <div style={{ 
+          display: 'flex', 
+          gap: `${tokens.spacing[2]}px`,
+          flexWrap: 'wrap',
+        }}>
           {sections.map((section) => (
             <button
               key={section}
@@ -552,7 +559,7 @@ const Navigation = memo(({
 
 Navigation.displayName = 'Navigation';
 
-// Token Editor Component (keeping same as before)
+// Token Editor Component
 const TokenEditor = memo(({ 
   showTokenEditor, 
   onClose, 
@@ -563,12 +570,12 @@ const TokenEditor = memo(({
   const editorStyle = useMemo(() => ({
     position: 'fixed',
     top: 0,
-    right: showTokenEditor ? 0 : '-420px',
-    width: '420px',
-    height: '100vh',
+    right: showTokenEditor ? 0 : '-100%',
+    width: 'min(100%, 420px)',
+    height: '100%',
     background: tokens.colors.dark.elevated,
     borderLeft: `1px solid ${tokens.colors.gray[800]}`,
-    padding: `${tokens.spacing[6]}px`,
+    padding: `${tokens.spacing[4]}px`,
     overflowY: 'auto',
     zIndex: 1000,
     transition: `right ${tokens.animation.slow} cubic-bezier(0.4, 0, 0.2, 1)`,
@@ -606,11 +613,11 @@ const TokenEditor = memo(({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: `${tokens.spacing[6]}px`,
+        marginBottom: `${tokens.spacing[4]}px`,
       }}>
         <h3 style={{
           fontFamily: tokens.typography.fontFamily.display,
-          fontSize: `${tokens.typography.fontSize['2xl']}px`,
+          fontSize: `${tokens.typography.fontSize.xl}px`,
           fontWeight: '700',
         }}>
           Token Editor
@@ -634,17 +641,18 @@ const TokenEditor = memo(({
       <div style={{
         fontSize: `${tokens.typography.fontSize.sm}px`,
         color: tokens.colors.gray[600],
-        marginBottom: `${tokens.spacing[6]}px`,
+        marginBottom: `${tokens.spacing[4]}px`,
       }}>
         Adjust tokens and watch the page update in real-time
       </div>
 
-      <div style={{ marginBottom: `${tokens.spacing[6]}px` }}>
+      <div style={{ marginBottom: `${tokens.spacing[4]}px` }}>
         <label style={{
           display: 'block',
           fontWeight: '600',
-          marginBottom: `${tokens.spacing[3]}px`,
+          marginBottom: `${tokens.spacing[2]}px`,
           color: tokens.colors.accent.primary,
+          fontSize: `${tokens.typography.fontSize.sm}px`,
         }}>
           Primary Accent
         </label>
@@ -663,12 +671,13 @@ const TokenEditor = memo(({
         />
       </div>
 
-      <div style={{ marginBottom: `${tokens.spacing[6]}px` }}>
+      <div style={{ marginBottom: `${tokens.spacing[4]}px` }}>
         <label style={{
           display: 'block',
           fontWeight: '600',
-          marginBottom: `${tokens.spacing[3]}px`,
+          marginBottom: `${tokens.spacing[2]}px`,
           color: tokens.colors.accent.secondary,
+          fontSize: `${tokens.typography.fontSize.sm}px`,
         }}>
           Secondary Accent
         </label>
@@ -687,11 +696,12 @@ const TokenEditor = memo(({
         />
       </div>
 
-      <div style={{ marginBottom: `${tokens.spacing[6]}px` }}>
+      <div style={{ marginBottom: `${tokens.spacing[4]}px` }}>
         <label style={{
           display: 'block',
           fontWeight: '600',
-          marginBottom: `${tokens.spacing[3]}px`,
+          marginBottom: `${tokens.spacing[2]}px`,
+          fontSize: `${tokens.typography.fontSize.sm}px`,
         }}>
           Base Spacing Unit: {tokens.spacing[1]}px
         </label>
@@ -709,11 +719,12 @@ const TokenEditor = memo(({
         />
       </div>
 
-      <div style={{ marginBottom: `${tokens.spacing[6]}px` }}>
+      <div style={{ marginBottom: `${tokens.spacing[4]}px` }}>
         <label style={{
           display: 'block',
           fontWeight: '600',
-          marginBottom: `${tokens.spacing[3]}px`,
+          marginBottom: `${tokens.spacing[2]}px`,
+          fontSize: `${tokens.typography.fontSize.sm}px`,
         }}>
           Border Radius Scale: {tokens.radius.md}px
         </label>
@@ -743,6 +754,7 @@ const TokenEditor = memo(({
           fontWeight: '600',
           cursor: 'pointer',
           transition: `all ${tokens.animation.normal}`,
+          fontSize: `${tokens.typography.fontSize.sm}px`,
         }}
       >
         Reset to Defaults
@@ -757,10 +769,10 @@ TokenEditor.displayName = 'TokenEditor';
 const FloatingButton = memo(({ onClick, tokens }) => {
   const buttonStyle = useMemo(() => ({
     position: 'fixed',
-    bottom: `${tokens.spacing[6]}px`,
-    right: `${tokens.spacing[6]}px`,
-    width: '64px',
-    height: '64px',
+    bottom: `${tokens.spacing[4]}px`,
+    right: `${tokens.spacing[4]}px`,
+    width: 'clamp(56px, 12vw, 64px)',
+    height: 'clamp(56px, 12vw, 64px)',
     borderRadius: '50%',
     background: `linear-gradient(135deg, ${tokens.colors.accent.primary}, ${tokens.colors.accent.secondary})`,
     border: 'none',
@@ -777,21 +789,21 @@ const FloatingButton = memo(({ onClick, tokens }) => {
 
   return (
     <button onClick={onClick} style={buttonStyle}>
-      <Sliders size={28} />
+      <Sliders size={24} />
     </button>
   );
 });
 
 FloatingButton.displayName = 'FloatingButton';
 
-// Case Study Detail Component (keeping same as before - truncated for space)
+// Case Study Detail Component
 const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
   const CodeBlock = useCallback(({ children, language = 'tsx' }) => (
     <div style={{
       background: tokens.colors.gray[900],
       borderRadius: `${tokens.radius.md}px`,
-      padding: `${tokens.spacing[4]}px`,
-      marginTop: `${tokens.spacing[3]}px`,
+      padding: `${tokens.spacing[3]}px`,
+      marginTop: `${tokens.spacing[2]}px`,
       overflow: 'auto',
     }}>
       <div style={{
@@ -804,11 +816,12 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
       </div>
       <pre style={{
         fontFamily: tokens.typography.fontFamily.mono,
-        fontSize: `${tokens.typography.fontSize.sm}px`,
+        fontSize: `clamp(${tokens.typography.fontSize.sm - 2}px, 2.5vw, ${tokens.typography.fontSize.sm}px)`,
         color: '#FFFFFF',
         lineHeight: '1.7',
         margin: 0,
         whiteSpace: 'pre-wrap',
+        wordBreak: 'break-word',
       }}>
         {children}
       </pre>
@@ -817,7 +830,7 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
 
   return (
     <div style={{
-      padding: `${tokens.spacing[16]}px ${tokens.spacing[6]}px`,
+      padding: `${tokens.spacing[8]}px ${tokens.spacing[4]}px`,
       background: tokens.colors.dark.bg,
       minHeight: '100vh',
     }}>
@@ -833,7 +846,7 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
             fontSize: `${tokens.typography.fontSize.base}px`,
             fontWeight: '600',
             cursor: 'pointer',
-            marginBottom: `${tokens.spacing[8]}px`,
+            marginBottom: `${tokens.spacing[6]}px`,
             display: 'flex',
             alignItems: 'center',
             gap: `${tokens.spacing[2]}px`,
@@ -845,7 +858,7 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           Back to all case studies
         </button>
 
-        <div className="animate-in stagger-1" style={{ marginBottom: `${tokens.spacing[12]}px` }}>
+        <div className="animate-in stagger-1" style={{ marginBottom: `${tokens.spacing[8]}px` }}>
           <div style={{
             fontFamily: tokens.typography.fontFamily.mono,
             fontSize: `${tokens.typography.fontSize.sm}px`,
@@ -858,15 +871,15 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           </div>
           <h1 style={{
             fontFamily: tokens.typography.fontFamily.display,
-            fontSize: `${tokens.typography.fontSize['4xl']}px`,
+            fontSize: `clamp(${tokens.typography.fontSize['2xl']}px, 6vw, ${tokens.typography.fontSize['4xl']}px)`,
             fontWeight: '800',
-            marginBottom: `${tokens.spacing[3]}px`,
+            marginBottom: `${tokens.spacing[2]}px`,
             lineHeight: '1.2',
           }}>
             {study.title}
           </h1>
           <div style={{
-            fontSize: `${tokens.typography.fontSize.xl}px`,
+            fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
             color: tokens.colors.gray[600],
           }}>
             {study.role}
@@ -876,20 +889,20 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
         <div className="animate-in stagger-2" style={{
           background: tokens.colors.dark.elevated,
           borderRadius: `${tokens.radius.lg}px`,
-          padding: `${tokens.spacing[6]}px`,
+          padding: `${tokens.spacing[4]}px`,
           borderLeft: `4px solid ${tokens.colors.gray[700]}`,
-          marginBottom: `${tokens.spacing[8]}px`,
+          marginBottom: `${tokens.spacing[6]}px`,
         }}>
           <h3 style={{
             fontFamily: tokens.typography.fontFamily.display,
-            fontSize: `${tokens.typography.fontSize['2xl']}px`,
+            fontSize: `clamp(${tokens.typography.fontSize.xl}px, 4vw, ${tokens.typography.fontSize['2xl']}px)`,
             fontWeight: '700',
-            marginBottom: `${tokens.spacing[4]}px`,
+            marginBottom: `${tokens.spacing[3]}px`,
           }}>
             Challenge
           </h3>
           <p style={{
-            fontSize: `${tokens.typography.fontSize.lg}px`,
+            fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.lg}px)`,
             color: tokens.colors.gray[600],
             lineHeight: '1.7',
           }}>
@@ -900,20 +913,20 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
         <div className="animate-in stagger-3" style={{
           background: tokens.colors.dark.elevated,
           borderRadius: `${tokens.radius.lg}px`,
-          padding: `${tokens.spacing[6]}px`,
+          padding: `${tokens.spacing[4]}px`,
           borderLeft: `4px solid ${tokens.colors.accent.primary}`,
-          marginBottom: `${tokens.spacing[8]}px`,
+          marginBottom: `${tokens.spacing[6]}px`,
         }}>
           <h3 style={{
             fontFamily: tokens.typography.fontFamily.display,
-            fontSize: `${tokens.typography.fontSize['2xl']}px`,
+            fontSize: `clamp(${tokens.typography.fontSize.xl}px, 4vw, ${tokens.typography.fontSize['2xl']}px)`,
             fontWeight: '700',
-            marginBottom: `${tokens.spacing[4]}px`,
+            marginBottom: `${tokens.spacing[3]}px`,
           }}>
             Solution
           </h3>
           <p style={{
-            fontSize: `${tokens.typography.fontSize.lg}px`,
+            fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.lg}px)`,
             color: tokens.colors.gray[600],
             lineHeight: '1.7',
           }}>
@@ -924,25 +937,25 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
         <div className="animate-in stagger-4" style={{
           background: tokens.colors.dark.elevated,
           borderRadius: `${tokens.radius.lg}px`,
-          padding: `${tokens.spacing[6]}px`,
+          padding: `${tokens.spacing[4]}px`,
           borderLeft: `4px solid ${tokens.colors.accent.tertiary}`,
-          marginBottom: `${tokens.spacing[12]}px`,
+          marginBottom: `${tokens.spacing[8]}px`,
         }}>
           <h3 style={{
             fontFamily: tokens.typography.fontFamily.display,
-            fontSize: `${tokens.typography.fontSize['2xl']}px`,
+            fontSize: `clamp(${tokens.typography.fontSize.xl}px, 4vw, ${tokens.typography.fontSize['2xl']}px)`,
             fontWeight: '700',
-            marginBottom: `${tokens.spacing[4]}px`,
+            marginBottom: `${tokens.spacing[3]}px`,
           }}>
             Impact
           </h3>
           <ul style={{ 
-            paddingLeft: `${tokens.spacing[5]}px`,
+            paddingLeft: `${tokens.spacing[4]}px`,
             margin: 0,
           }}>
             {study.impact.map((item, i) => (
               <li key={i} style={{
-                fontSize: `${tokens.typography.fontSize.lg}px`,
+                fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.lg}px)`,
                 color: tokens.colors.gray[600],
                 lineHeight: '1.7',
                 marginBottom: `${tokens.spacing[2]}px`,
@@ -956,26 +969,26 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
         <div>
           <h2 style={{
             fontFamily: tokens.typography.fontFamily.display,
-            fontSize: `${tokens.typography.fontSize['3xl']}px`,
+            fontSize: `clamp(${tokens.typography.fontSize['2xl']}px, 5vw, ${tokens.typography.fontSize['3xl']}px)`,
             fontWeight: '800',
-            marginBottom: `${tokens.spacing[6]}px`,
+            marginBottom: `${tokens.spacing[4]}px`,
           }}>
             Technical Implementation
           </h2>
 
           {study.implementation.before && (
-            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[8]}px` }}>
+            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[6]}px` }}>
               <h4 style={{
-                fontSize: `${tokens.typography.fontSize.xl}px`,
+                fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
                 fontWeight: '600',
-                marginBottom: `${tokens.spacing[4]}px`,
+                marginBottom: `${tokens.spacing[3]}px`,
               }}>
                 Token System Transformation
               </h4>
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: `${tokens.spacing[4]}px`,
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+                gap: `${tokens.spacing[3]}px`,
               }}>
                 <div>
                   <div style={{
@@ -1006,24 +1019,24 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           )}
 
           {study.implementation.atomic && (
-            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[8]}px` }}>
+            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[6]}px` }}>
               <h4 style={{
-                fontSize: `${tokens.typography.fontSize.xl}px`,
+                fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
                 fontWeight: '600',
-                marginBottom: `${tokens.spacing[4]}px`,
+                marginBottom: `${tokens.spacing[3]}px`,
               }}>
                 Atomic Design Hierarchy
               </h4>
               <div style={{
                 background: tokens.colors.dark.elevated,
                 borderRadius: `${tokens.radius.md}px`,
-                padding: `${tokens.spacing[4]}px`,
-                marginBottom: `${tokens.spacing[4]}px`,
+                padding: `${tokens.spacing[3]}px`,
+                marginBottom: `${tokens.spacing[3]}px`,
               }}>
                 {Object.entries(study.implementation.atomic).map(([key, value]) => (
                   <div key={key} style={{
                     fontFamily: tokens.typography.fontFamily.mono,
-                    fontSize: `${tokens.typography.fontSize.base}px`,
+                    fontSize: `clamp(${tokens.typography.fontSize.sm}px, 2.5vw, ${tokens.typography.fontSize.base}px)`,
                     marginBottom: `${tokens.spacing[2]}px`,
                   }}>
                     <span style={{ 
@@ -1043,24 +1056,24 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           )}
 
           {study.implementation.brands && (
-            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[8]}px` }}>
+            <div className="animate-in" style={{ marginBottom: `${tokens.spacing[6]}px` }}>
               <h4 style={{
-                fontSize: `${tokens.typography.fontSize.xl}px`,
+                fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
                 fontWeight: '600',
-                marginBottom: `${tokens.spacing[4]}px`,
+                marginBottom: `${tokens.spacing[3]}px`,
               }}>
                 Multi-Brand Theme System
               </h4>
               <div style={{
                 background: tokens.colors.dark.elevated,
                 borderRadius: `${tokens.radius.md}px`,
-                padding: `${tokens.spacing[4]}px`,
-                marginBottom: `${tokens.spacing[4]}px`,
+                padding: `${tokens.spacing[3]}px`,
+                marginBottom: `${tokens.spacing[3]}px`,
               }}>
                 <div style={{
                   fontSize: `${tokens.typography.fontSize.sm}px`,
                   color: tokens.colors.gray[600],
-                  marginBottom: `${tokens.spacing[3]}px`,
+                  marginBottom: `${tokens.spacing[2]}px`,
                 }}>
                   Brands Supported:
                 </div>
@@ -1068,11 +1081,11 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
                   display: 'flex', 
                   gap: `${tokens.spacing[2]}px`, 
                   flexWrap: 'wrap',
-                  marginBottom: `${tokens.spacing[4]}px`,
+                  marginBottom: `${tokens.spacing[3]}px`,
                 }}>
                   {study.implementation.brands.map(brand => (
                     <span key={brand} style={{
-                      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                      padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       background: tokens.colors.dark.bg,
                       border: `1px solid ${tokens.colors.gray[800]}`,
                       borderRadius: `${tokens.radius.sm}px`,
@@ -1089,9 +1102,9 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
 
           <div className="animate-in">
             <h4 style={{
-              fontSize: `${tokens.typography.fontSize.xl}px`,
+              fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
               fontWeight: '600',
-              marginBottom: `${tokens.spacing[4]}px`,
+              marginBottom: `${tokens.spacing[3]}px`,
             }}>
               Implementation Code
             </h4>
@@ -1201,7 +1214,6 @@ export default function Portfolio() {
   const handleLoginSuccess = useCallback(() => {
     setIsUnlocked(true);
     setShowLoginModal(false);
-    // Open the pending case study after successful login
     if (pendingCaseId) {
       setSelectedCase(pendingCaseId);
       setPendingCaseId(null);
@@ -1230,7 +1242,7 @@ export default function Portfolio() {
     leave: () => setNavHovering(false),
   }), []);
 
-  // Global styles
+  // Global styles with enhanced mobile support
   const globalStyles = useMemo(() => `
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@600;700;800&display=swap');
     
@@ -1246,6 +1258,7 @@ export default function Portfolio() {
       color: #FFFFFF;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      min-width: 320px;
     }
     
     ::selection {
@@ -1287,9 +1300,27 @@ export default function Portfolio() {
     .stagger-2 { animation-delay: 200ms; }
     .stagger-3 { animation-delay: 300ms; }
     .stagger-4 { animation-delay: 400ms; }
+
+    /* Hide decorative elements on small screens */
+    .responsive-hide-mobile {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .responsive-hide-mobile {
+        display: none !important;
+      }
+    }
+
+    /* Extra small device optimizations */
+    @media (max-width: 480px) {
+      body {
+        font-size: 14px;
+      }
+    }
   `, [tokens]);
 
-  // Hero Section - keeping same (truncated for space)
+  // Hero Section
   const Hero = useMemo(() => {
     const stats = [
       { value: '5+', label: 'Years Engineering' },
@@ -1301,7 +1332,7 @@ export default function Portfolio() {
 
     return (
       <div style={{
-        padding: `${tokens.spacing[16]}px ${tokens.spacing[6]}px`,
+        padding: `clamp(${tokens.spacing[8]}px, 10vw, ${tokens.spacing[16]}px) clamp(${tokens.spacing[4]}px, 5vw, ${tokens.spacing[6]}px)`,
         position: 'relative',
         minHeight: '90vh',
         display: 'flex',
@@ -1309,23 +1340,24 @@ export default function Portfolio() {
       }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto', width: '100%', position: 'relative', zIndex: 1 }}>
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: `${tokens.spacing[12]}px`,
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            gap: `clamp(${tokens.spacing[6]}px, 8vw, ${tokens.spacing[12]}px)`,
             alignItems: 'center',
           }}>
-            <div>
+            <div style={{ flex: '1 1 min(100%, 400px)', minWidth: '280px' }}>
               <div 
                 className="animate-in"
                 style={{
                   fontFamily: tokens.typography.fontFamily.mono,
-                  fontSize: `${tokens.typography.fontSize.sm}px`,
+                  fontSize: `clamp(${tokens.typography.fontSize.sm - 2}px, 2.5vw, ${tokens.typography.fontSize.sm}px)`,
                   color: tokens.colors.accent.primary,
-                  marginBottom: `${tokens.spacing[4]}px`,
+                  marginBottom: `${tokens.spacing[3]}px`,
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                 }}>
-                <Zap size={16} style={{ display: 'inline', marginRight: '8px' }} />
+                <Zap size={14} style={{ display: 'inline', marginRight: '6px' }} />
                 Design Systems Engineer
               </div>
               
@@ -1333,14 +1365,15 @@ export default function Portfolio() {
                 className="animate-in stagger-1"
                 style={{
                   fontFamily: tokens.typography.fontFamily.display,
-                  fontSize: `${tokens.typography.fontSize['5xl']}px`,
+                  fontSize: `clamp(${tokens.typography.fontSize['2xl']}px, 7vw, ${tokens.typography.fontSize['4xl']}px)`,
                   fontWeight: '800',
                   lineHeight: '1.1',
-                  marginBottom: `${tokens.spacing[5]}px`,
+                  marginBottom: `${tokens.spacing[4]}px`,
                   background: `linear-gradient(135deg, #FFFFFF, ${tokens.colors.gray[600]})`,
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
+                  wordWrap: 'break-word'
                 }}>
                 Engineering precision meets creative vision
               </h1>
@@ -1348,10 +1381,10 @@ export default function Portfolio() {
               <p 
                 className="animate-in stagger-2"
                 style={{
-                  fontSize: `${tokens.typography.fontSize.xl}px`,
+                  fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
                   color: tokens.colors.gray[600],
                   lineHeight: '1.7',
-                  marginBottom: `${tokens.spacing[8]}px`,
+                  marginBottom: `${tokens.spacing[6]}px`,
                   maxWidth: '600px',
                 }}>
                 I architect design systems that scale. From Figma variables to production code, 
@@ -1362,7 +1395,8 @@ export default function Portfolio() {
                 className="animate-in stagger-3"
                 style={{
                   display: 'flex',
-                  gap: `${tokens.spacing[3]}px`,
+                  gap: `${tokens.spacing[2]}px`,
+                  flexWrap: 'wrap',
                 }}>
                 <button
                   onClick={() => handleSectionChange('work')}
@@ -1370,10 +1404,10 @@ export default function Portfolio() {
                     background: `linear-gradient(135deg, ${tokens.colors.accent.primary}, ${tokens.colors.accent.secondary})`,
                     color: '#FFFFFF',
                     border: 'none',
-                    padding: `${tokens.spacing[4]}px ${tokens.spacing[6]}px`,
+                    padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                     borderRadius: `${tokens.radius.lg}px`,
                     fontFamily: tokens.typography.fontFamily.body,
-                    fontSize: `${tokens.typography.fontSize.base}px`,
+                    fontSize: `clamp(${tokens.typography.fontSize.sm}px, 2.5vw, ${tokens.typography.fontSize.base}px)`,
                     fontWeight: '700',
                     cursor: 'pointer',
                     display: 'flex',
@@ -1381,10 +1415,13 @@ export default function Portfolio() {
                     gap: `${tokens.spacing[2]}px`,
                     transition: `all ${tokens.animation.normal}`,
                     boxShadow: `0 4px 24px ${tokens.colors.accent.primary}40`,
+                    flex: '1 1 auto',
+                    minWidth: '160px',
+                    justifyContent: 'center',
                   }}
                 >
                   View Case Studies
-                  <ChevronRight size={20} />
+                  <ChevronRight size={18} />
                 </button>
                 
                 <button
@@ -1393,19 +1430,22 @@ export default function Portfolio() {
                     background: 'transparent',
                     color: '#FFFFFF',
                     border: `2px solid ${tokens.colors.gray[800]}`,
-                    padding: `${tokens.spacing[4]}px ${tokens.spacing[6]}px`,
+                    padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                     borderRadius: `${tokens.radius.lg}px`,
                     fontFamily: tokens.typography.fontFamily.body,
-                    fontSize: `${tokens.typography.fontSize.base}px`,
+                    fontSize: `clamp(${tokens.typography.fontSize.sm}px, 2.5vw, ${tokens.typography.fontSize.base}px)`,
                     fontWeight: '700',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     gap: `${tokens.spacing[2]}px`,
                     transition: `all ${tokens.animation.normal}`,
+                    flex: '1 1 auto',
+                    minWidth: '160px',
+                    justifyContent: 'center',
                   }}
                 >
-                  <Play size={20} />
+                  <Play size={18} />
                   Try Live Editor
                 </button>
               </div>
@@ -1413,21 +1453,21 @@ export default function Portfolio() {
               <div 
                 className="animate-in stagger-4"
                 style={{
-                  marginTop: `${tokens.spacing[12]}px`,
+                  marginTop: `clamp(${tokens.spacing[6]}px, 8vw, ${tokens.spacing[12]}px)`,
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
-                  gap: `${tokens.spacing[5]}px`,
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                  gap: `${tokens.spacing[3]}px`,
                 }}>
                 {stats.map((stat) => (
                   <div key={stat.label} style={{
-                    padding: `${tokens.spacing[4]}px`,
+                    padding: `${tokens.spacing[3]}px`,
                     background: `${tokens.colors.dark.surface}80`,
                     borderRadius: `${tokens.radius.md}px`,
                     border: `1px solid ${tokens.colors.gray[900]}`,
                   }}>
                     <div style={{
                       fontFamily: tokens.typography.fontFamily.display,
-                      fontSize: `${tokens.typography.fontSize['3xl']}px`,
+                      fontSize: `clamp(${tokens.typography.fontSize.xl}px, 5vw, ${tokens.typography.fontSize['3xl']}px)`,
                       fontWeight: '800',
                       color: tokens.colors.accent.primary,
                       marginBottom: `${tokens.spacing[1]}px`,
@@ -1435,7 +1475,7 @@ export default function Portfolio() {
                       {stat.value}
                     </div>
                     <div style={{
-                      fontSize: `${tokens.typography.fontSize.sm}px`,
+                      fontSize: `clamp(${tokens.typography.fontSize.sm - 2}px, 2vw, ${tokens.typography.fontSize.sm}px)`,
                       color: tokens.colors.gray[600],
                     }}>
                       {stat.label}
@@ -1445,9 +1485,12 @@ export default function Portfolio() {
               </div>
             </div>
 
-            <div style={{
+            {/* Hide orbital visualization on mobile */}
+            <div className="responsive-hide-mobile" style={{
               position: 'relative',
               height: '600px',
+              flex: '1 1 400px',
+              minWidth: '400px',
             }}>
               <div style={{
                 position: 'absolute',
@@ -1500,7 +1543,7 @@ export default function Portfolio() {
     );
   }, [tokens, handleSectionChange, handleTokenEditorToggle]);
 
-  // Work Section - with lock indicator
+  // Work Section
   const Work = useMemo(() => {
     if (selectedCase !== null) {
       const study = CASE_STUDIES_DATA.find(s => s.id === selectedCase);
@@ -1509,22 +1552,22 @@ export default function Portfolio() {
 
     return (
       <div style={{
-        padding: `${tokens.spacing[16]}px ${tokens.spacing[6]}px`,
+        padding: `clamp(${tokens.spacing[8]}px, 10vw, ${tokens.spacing[16]}px) clamp(${tokens.spacing[4]}px, 5vw, ${tokens.spacing[6]}px)`,
         background: tokens.colors.dark.bg,
       }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <h2 style={{
             fontFamily: tokens.typography.fontFamily.display,
-            fontSize: `${tokens.typography.fontSize['4xl']}px`,
+            fontSize: `clamp(${tokens.typography.fontSize['2xl']}px, 6vw, ${tokens.typography.fontSize['4xl']}px)`,
             fontWeight: '800',
-            marginBottom: `${tokens.spacing[3]}px`,
+            marginBottom: `${tokens.spacing[2]}px`,
           }}>
             Case Studies
           </h2>
           <p style={{
-            fontSize: `${tokens.typography.fontSize.xl}px`,
+            fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
             color: tokens.colors.gray[600],
-            marginBottom: `${tokens.spacing[12]}px`,
+            marginBottom: `clamp(${tokens.spacing[6]}px, 8vw, ${tokens.spacing[12]}px)`,
             maxWidth: '800px',
           }}>
             Enterprise design systems for financial services, industrial IoT, and consumer platforms
@@ -1532,8 +1575,8 @@ export default function Portfolio() {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-            gap: `${tokens.spacing[6]}px`,
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+            gap: `${tokens.spacing[4]}px`,
           }}>
             {CASE_STUDIES_DATA.map((study, idx) => (
               <div
@@ -1543,7 +1586,7 @@ export default function Portfolio() {
                 style={{
                   background: tokens.colors.dark.elevated,
                   borderRadius: `${tokens.radius.lg}px`,
-                  padding: `${tokens.spacing[6]}px`,
+                  padding: `${tokens.spacing[4]}px`,
                   border: `1px solid ${tokens.colors.gray[900]}`,
                   cursor: 'pointer',
                   transition: `all ${tokens.animation.normal}`,
@@ -1573,8 +1616,8 @@ export default function Portfolio() {
                 {!isUnlocked && (
                   <div style={{
                     position: 'absolute',
-                    top: `${tokens.spacing[4]}px`,
-                    right: `${tokens.spacing[4]}px`,
+                    top: `${tokens.spacing[3]}px`,
+                    right: `${tokens.spacing[3]}px`,
                     background: `${tokens.colors.accent.secondary}20`,
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: `${tokens.radius.sm}px`,
@@ -1582,9 +1625,9 @@ export default function Portfolio() {
                     alignItems: 'center',
                     gap: `${tokens.spacing[1]}px`,
                   }}>
-                    <Lock size={14} color={tokens.colors.accent.secondary} />
+                    <Lock size={12} color={tokens.colors.accent.secondary} />
                     <span style={{
-                      fontSize: `${tokens.typography.fontSize.sm}px`,
+                      fontSize: `${tokens.typography.fontSize.sm - 2}px`,
                       color: tokens.colors.accent.secondary,
                       fontWeight: '600',
                     }}>
@@ -1597,32 +1640,32 @@ export default function Portfolio() {
                   fontFamily: tokens.typography.fontFamily.mono,
                   fontSize: `${tokens.typography.fontSize.sm}px`,
                   color: tokens.colors.accent.primary,
-                  marginBottom: `${tokens.spacing[3]}px`,
+                  marginBottom: `${tokens.spacing[2]}px`,
                 }}>
                   {study.client}
                 </div>
 
                 <h3 style={{
                   fontFamily: tokens.typography.fontFamily.display,
-                  fontSize: `${tokens.typography.fontSize['2xl']}px`,
+                  fontSize: `clamp(${tokens.typography.fontSize.lg}px, 3.5vw, ${tokens.typography.fontSize['2xl']}px)`,
                   fontWeight: '700',
-                  marginBottom: `${tokens.spacing[4]}px`,
+                  marginBottom: `${tokens.spacing[3]}px`,
                 }}>
                   {study.title}
                 </h3>
 
                 <div style={{
                   display: 'flex',
-                  gap: `${tokens.spacing[2]}px`,
+                  gap: `${tokens.spacing[1]}px`,
                   flexWrap: 'wrap',
-                  marginBottom: `${tokens.spacing[4]}px`,
+                  marginBottom: `${tokens.spacing[3]}px`,
                 }}>
                   {study.tags.map(tag => (
                     <span key={tag} style={{
-                      padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
+                      padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       background: `${tokens.colors.gray[900]}80`,
                       borderRadius: `${tokens.radius.sm}px`,
-                      fontSize: `${tokens.typography.fontSize.sm}px`,
+                      fontSize: `${tokens.typography.fontSize.sm - 2}px`,
                       color: tokens.colors.gray[600],
                     }}>
                       {tag}
@@ -1633,13 +1676,13 @@ export default function Portfolio() {
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: `${tokens.spacing[2]}px`,
+                  gap: `${tokens.spacing[1]}px`,
                   color: tokens.colors.accent.primary,
                   fontSize: `${tokens.typography.fontSize.sm}px`,
                   fontWeight: '600',
                 }}>
                   {isUnlocked ? 'View Details' : 'Unlock to View'}
-                  {isUnlocked ? <ChevronRight size={16} /> : <Lock size={16} />}
+                  {isUnlocked ? <ChevronRight size={14} /> : <Lock size={14} />}
                 </div>
               </div>
             ))}
@@ -1649,25 +1692,25 @@ export default function Portfolio() {
     );
   }, [tokens, selectedCase, isUnlocked, handleCaseClick, handleCaseClose]);
 
-  // Lab and About sections remain the same (truncated for space)
+  // Lab Section
   const DesignLab = useMemo(() => (
     <div style={{
-      padding: `${tokens.spacing[16]}px ${tokens.spacing[6]}px`,
+      padding: `clamp(${tokens.spacing[8]}px, 10vw, ${tokens.spacing[16]}px) clamp(${tokens.spacing[4]}px, 5vw, ${tokens.spacing[6]}px)`,
       background: tokens.colors.dark.surface,
     }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         <h2 style={{
           fontFamily: tokens.typography.fontFamily.display,
-          fontSize: `${tokens.typography.fontSize['4xl']}px`,
+          fontSize: `clamp(${tokens.typography.fontSize['2xl']}px, 6vw, ${tokens.typography.fontSize['4xl']}px)`,
           fontWeight: '800',
-          marginBottom: `${tokens.spacing[3]}px`,
+          marginBottom: `${tokens.spacing[2]}px`,
         }}>
           Design Lab
         </h2>
         <p style={{
-          fontSize: `${tokens.typography.fontSize.xl}px`,
+          fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
           color: tokens.colors.gray[600],
-          marginBottom: `${tokens.spacing[12]}px`,
+          marginBottom: `clamp(${tokens.spacing[6]}px, 8vw, ${tokens.spacing[12]}px)`,
           maxWidth: '800px',
         }}>
           Interactive showcase of the token system. Click the floating button to edit tokens live.
@@ -1675,9 +1718,9 @@ export default function Portfolio() {
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-          gap: `${tokens.spacing[4]}px`,
-          marginBottom: `${tokens.spacing[12]}px`,
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 200px), 1fr))',
+          gap: `${tokens.spacing[3]}px`,
+          marginBottom: `clamp(${tokens.spacing[6]}px, 8vw, ${tokens.spacing[12]}px)`,
         }}>
           {Object.entries(tokens.colors.accent).map(([key, value]) => (
             <div
@@ -1686,7 +1729,7 @@ export default function Portfolio() {
               style={{
                 background: tokens.colors.dark.elevated,
                 borderRadius: `${tokens.radius.md}px`,
-                padding: `${tokens.spacing[4]}px`,
+                padding: `${tokens.spacing[3]}px`,
                 border: `1px solid ${tokens.colors.gray[900]}`,
               }}
             >
@@ -1695,7 +1738,7 @@ export default function Portfolio() {
                 height: '80px',
                 background: value,
                 borderRadius: `${tokens.radius.sm}px`,
-                marginBottom: `${tokens.spacing[3]}px`,
+                marginBottom: `${tokens.spacing[2]}px`,
               }} />
               <div style={{
                 fontFamily: tokens.typography.fontFamily.mono,
@@ -1707,8 +1750,9 @@ export default function Portfolio() {
               </div>
               <div style={{
                 fontFamily: tokens.typography.fontFamily.mono,
-                fontSize: `${tokens.typography.fontSize.base}px`,
+                fontSize: `${tokens.typography.fontSize.sm}px`,
                 fontWeight: '600',
+                wordBreak: 'break-all',
               }}>
                 {value}
               </div>
@@ -1719,24 +1763,24 @@ export default function Portfolio() {
         <div style={{
           background: `linear-gradient(135deg, ${tokens.colors.accent.primary}20, ${tokens.colors.accent.secondary}20)`,
           borderRadius: `${tokens.radius.lg}px`,
-          padding: `${tokens.spacing[8]}px`,
+          padding: `clamp(${tokens.spacing[4]}px, 6vw, ${tokens.spacing[8]}px)`,
           border: `1px solid ${tokens.colors.accent.primary}40`,
           textAlign: 'center',
         }}>
-          <Sliders size={48} style={{ 
+          <Sliders size={40} style={{ 
             color: tokens.colors.accent.primary,
-            marginBottom: `${tokens.spacing[4]}px`,
+            marginBottom: `${tokens.spacing[3]}px`,
           }} />
           <h3 style={{
             fontFamily: tokens.typography.fontFamily.display,
-            fontSize: `${tokens.typography.fontSize['3xl']}px`,
+            fontSize: `clamp(${tokens.typography.fontSize.xl}px, 4vw, ${tokens.typography.fontSize['3xl']}px)`,
             fontWeight: '700',
-            marginBottom: `${tokens.spacing[3]}px`,
+            marginBottom: `${tokens.spacing[2]}px`,
           }}>
             Try the Live Token Editor
           </h3>
           <p style={{
-            fontSize: `${tokens.typography.fontSize.lg}px`,
+            fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.lg}px)`,
             color: tokens.colors.gray[600],
           }}>
             Click the floating button to adjust colors, spacing, and border radius in real-time
@@ -1746,20 +1790,21 @@ export default function Portfolio() {
     </div>
   ), [tokens]);
 
+  // About Section
   const About = useMemo(() => {
     const features = [
       {
-        icon: <Code size={32} />,
+        icon: <Code size={28} />,
         title: 'I speak both languages',
         body: 'Fluent in design thinking and engineering architecture. I know what\'s possible in code, what\'s performant, and what will break in production.',
       },
       {
-        icon: <Layers size={32} />,
+        icon: <Layers size={28} />,
         title: 'Systems thinking is innate',
         body: 'When I design a component, I\'m already considering prop APIs, variant logic, and edge cases. This prevents design debt before it starts.',
       },
       {
-        icon: <Zap size={32} />,
+        icon: <Zap size={28} />,
         title: 'I ship with confidence',
         body: 'From Figma to production, I move fast without sacrificing quality. 15-20% bug reduction through systematic QA and testing utilities.',
       },
@@ -1767,24 +1812,24 @@ export default function Portfolio() {
 
     return (
       <div style={{
-        padding: `${tokens.spacing[16]}px ${tokens.spacing[6]}px`,
+        padding: `clamp(${tokens.spacing[8]}px, 10vw, ${tokens.spacing[16]}px) clamp(${tokens.spacing[4]}px, 5vw, ${tokens.spacing[6]}px)`,
         background: tokens.colors.dark.bg,
       }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <h2 style={{
             fontFamily: tokens.typography.fontFamily.display,
-            fontSize: `${tokens.typography.fontSize['4xl']}px`,
+            fontSize: `clamp(${tokens.typography.fontSize['2xl']}px, 6vw, ${tokens.typography.fontSize['4xl']}px)`,
             fontWeight: '800',
-            marginBottom: `${tokens.spacing[8]}px`,
+            marginBottom: `${tokens.spacing[6]}px`,
           }}>
             Engineering × Design
           </h2>
 
           <p style={{
-            fontSize: `${tokens.typography.fontSize['2xl']}px`,
+            fontSize: `clamp(${tokens.typography.fontSize.lg}px, 3.5vw, ${tokens.typography.fontSize['2xl']}px)`,
             color: tokens.colors.gray[600],
             lineHeight: '1.7',
-            marginBottom: `${tokens.spacing[12]}px`,
+            marginBottom: `clamp(${tokens.spacing[6]}px, 8vw, ${tokens.spacing[12]}px)`,
           }}>
             I bridge the gap between design vision and production reality. 
             My engineering background isn't a bonus—it's my superpower.
@@ -1792,7 +1837,7 @@ export default function Portfolio() {
 
           <div style={{
             display: 'grid',
-            gap: `${tokens.spacing[6]}px`,
+            gap: `${tokens.spacing[4]}px`,
           }}>
             {features.map((item, idx) => (
               <div
@@ -1801,23 +1846,23 @@ export default function Portfolio() {
                 style={{
                   background: tokens.colors.dark.elevated,
                   borderRadius: `${tokens.radius.lg}px`,
-                  padding: `${tokens.spacing[6]}px`,
+                  padding: `${tokens.spacing[4]}px`,
                   border: `1px solid ${tokens.colors.gray[900]}`,
                 }}
               >
-                <div style={{ color: tokens.colors.accent.primary, marginBottom: `${tokens.spacing[3]}px` }}>
+                <div style={{ color: tokens.colors.accent.primary, marginBottom: `${tokens.spacing[2]}px` }}>
                   {item.icon}
                 </div>
                 <h3 style={{
                   fontFamily: tokens.typography.fontFamily.display,
-                  fontSize: `${tokens.typography.fontSize.xl}px`,
+                  fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
                   fontWeight: '700',
-                  marginBottom: `${tokens.spacing[3]}px`,
+                  marginBottom: `${tokens.spacing[2]}px`,
                 }}>
                   {item.title}
                 </h3>
                 <p style={{
-                  fontSize: `${tokens.typography.fontSize.lg}px`,
+                  fontSize: `clamp(${tokens.typography.fontSize.base}px, 2.5vw, ${tokens.typography.fontSize.lg}px)`,
                   color: tokens.colors.gray[600],
                   lineHeight: '1.7',
                 }}>
@@ -1828,20 +1873,20 @@ export default function Portfolio() {
           </div>
 
           <div style={{
-            marginTop: `${tokens.spacing[12]}px`,
+            marginTop: `clamp(${tokens.spacing[6]}px, 8vw, ${tokens.spacing[12]}px)`,
             textAlign: 'center',
           }}>
             <a
               href="mailto:harrison64@gmail.com"
               style={{
                 display: 'inline-block',
-                padding: `${tokens.spacing[4]}px ${tokens.spacing[8]}px`,
+                padding: `${tokens.spacing[3]}px ${tokens.spacing[6]}px`,
                 background: `linear-gradient(135deg, ${tokens.colors.accent.primary}, ${tokens.colors.accent.secondary})`,
                 color: '#FFFFFF',
                 textDecoration: 'none',
                 borderRadius: `${tokens.radius.lg}px`,
                 fontWeight: '700',
-                fontSize: `${tokens.typography.fontSize.xl}px`,
+                fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
                 transition: `all ${tokens.animation.normal}`,
                 boxShadow: `0 4px 24px ${tokens.colors.accent.primary}40`,
               }}
@@ -1857,6 +1902,7 @@ export default function Portfolio() {
   return (
     <div>
       <style>{globalStyles}</style>
+      
       <BackgroundGradient 
         mousePosition={mousePosition} 
         primaryColor={tokens.colors.accent.primary}
