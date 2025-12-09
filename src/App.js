@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
-import { ChevronRight, Code, Layers, Zap, Sliders, Play, X, ArrowLeft } from 'lucide-react';
+import { ChevronRight, Code, Layers, Zap, Sliders, Play, ArrowLeft, Lock, Eye, EyeOff } from 'lucide-react';
 
 // DESIGN TOKEN SYSTEM - Outside component to prevent recreation
 const createTokenSystem = () => ({
@@ -65,6 +65,9 @@ const createTokenSystem = () => ({
     slow: '500ms',
   }
 });
+
+// Simple password - you can change this to whatever you want
+const PORTFOLIO_PASSWORD = 'designsystems2024';
 
 // Case study data with full details
 const CASE_STUDIES_DATA = [
@@ -204,13 +207,251 @@ const BackgroundGradient = memo(({ mousePosition, primaryColor }) => {
 
 BackgroundGradient.displayName = 'BackgroundGradient';
 
+// Login Modal Component
+const LoginModal = memo(({ tokens, onSuccess, onClose }) => {
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [isShaking, setIsShaking] = useState(false);
+
+  const handleSubmit = useCallback((e) => {
+    e.preventDefault();
+    
+    if (password === PORTFOLIO_PASSWORD) {
+      // Store in sessionStorage so it persists during the session
+      sessionStorage.setItem('portfolioUnlocked', 'true');
+      onSuccess();
+    } else {
+      setError('Incorrect password');
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
+      setPassword('');
+    }
+  }, [password, onSuccess]);
+
+  const overlayStyle = useMemo(() => ({
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'rgba(0, 0, 0, 0.8)',
+    backdropFilter: 'blur(8px)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 2000,
+    animation: 'fadeIn 300ms ease-out',
+  }), []);
+
+  const modalStyle = useMemo(() => ({
+    background: tokens.colors.dark.elevated,
+    borderRadius: `${tokens.radius.xl}px`,
+    padding: `${tokens.spacing[8]}px`,
+    maxWidth: '500px',
+    width: '90%',
+    border: `1px solid ${tokens.colors.gray[800]}`,
+    boxShadow: `0 20px 60px rgba(0, 0, 0, 0.5)`,
+    animation: isShaking ? 'shake 0.5s' : 'slideUp 400ms ease-out',
+  }), [tokens, isShaking]);
+
+  return (
+    <>
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+          20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+      `}</style>
+      
+      <div style={overlayStyle} onClick={onClose}>
+        <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
+          {/* Lock Icon */}
+          <div style={{
+            width: '80px',
+            height: '80px',
+            margin: '0 auto',
+            marginBottom: `${tokens.spacing[6]}px`,
+            background: `linear-gradient(135deg, ${tokens.colors.accent.primary}, ${tokens.colors.accent.secondary})`,
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Lock size={40} color="#FFFFFF" />
+          </div>
+
+          {/* Title */}
+          <h2 style={{
+            fontFamily: tokens.typography.fontFamily.display,
+            fontSize: `${tokens.typography.fontSize['3xl']}px`,
+            fontWeight: '800',
+            textAlign: 'center',
+            marginBottom: `${tokens.spacing[3]}px`,
+          }}>
+            Protected Content
+          </h2>
+
+          {/* Description */}
+          <p style={{
+            fontSize: `${tokens.typography.fontSize.lg}px`,
+            color: tokens.colors.gray[600],
+            textAlign: 'center',
+            marginBottom: `${tokens.spacing[6]}px`,
+            lineHeight: '1.6',
+          }}>
+            These case studies contain confidential client work. Please enter the password to view details.
+          </p>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            <div style={{ position: 'relative', marginBottom: `${tokens.spacing[4]}px` }}>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError('');
+                }}
+                placeholder="Enter password"
+                autoFocus
+                style={{
+                  width: '100%',
+                  padding: `${tokens.spacing[4]}px ${tokens.spacing[12]}px ${tokens.spacing[4]}px ${tokens.spacing[4]}px`,
+                  background: tokens.colors.dark.surface,
+                  border: `2px solid ${error ? tokens.colors.accent.secondary : tokens.colors.gray[800]}`,
+                  borderRadius: `${tokens.radius.md}px`,
+                  color: '#FFFFFF',
+                  fontSize: `${tokens.typography.fontSize.base}px`,
+                  fontFamily: tokens.typography.fontFamily.body,
+                  outline: 'none',
+                  transition: `all ${tokens.animation.normal}`,
+                }}
+                onFocus={(e) => {
+                  if (!error) e.currentTarget.style.borderColor = tokens.colors.accent.primary;
+                }}
+                onBlur={(e) => {
+                  if (!error) e.currentTarget.style.borderColor = tokens.colors.gray[800];
+                }}
+              />
+              
+              {/* Toggle Password Visibility */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute',
+                  right: `${tokens.spacing[4]}px`,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  color: tokens.colors.gray[600],
+                  cursor: 'pointer',
+                  padding: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div style={{
+                color: tokens.colors.accent.secondary,
+                fontSize: `${tokens.typography.fontSize.sm}px`,
+                marginBottom: `${tokens.spacing[4]}px`,
+                textAlign: 'center',
+              }}>
+                {error}
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              style={{
+                width: '100%',
+                padding: `${tokens.spacing[4]}px`,
+                background: `linear-gradient(135deg, ${tokens.colors.accent.primary}, ${tokens.colors.accent.secondary})`,
+                border: 'none',
+                borderRadius: `${tokens.radius.md}px`,
+                color: '#FFFFFF',
+                fontSize: `${tokens.typography.fontSize.base}px`,
+                fontWeight: '700',
+                cursor: 'pointer',
+                transition: `all ${tokens.animation.normal}`,
+                boxShadow: `0 4px 24px ${tokens.colors.accent.primary}40`,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = `0 8px 32px ${tokens.colors.accent.primary}60`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = `0 4px 24px ${tokens.colors.accent.primary}40`;
+              }}
+            >
+              Unlock Case Studies
+            </button>
+          </form>
+
+          {/* Cancel Button */}
+          <button
+            onClick={onClose}
+            style={{
+              width: '100%',
+              padding: `${tokens.spacing[3]}px`,
+              background: 'transparent',
+              border: 'none',
+              color: tokens.colors.gray[600],
+              fontSize: `${tokens.typography.fontSize.sm}px`,
+              cursor: 'pointer',
+              marginTop: `${tokens.spacing[4]}px`,
+              transition: `all ${tokens.animation.normal}`,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#FFFFFF';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = tokens.colors.gray[600];
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </>
+  );
+});
+
+LoginModal.displayName = 'LoginModal';
+
 // Memoized Navigation Component
 const Navigation = memo(({ 
   activeSection, 
   onSectionChange, 
   tokens, 
   navHovering, 
-  onNavHover 
+  onNavHover,
+  isUnlocked 
 }) => {
   const navStyle = useMemo(() => ({
     position: 'sticky',
@@ -273,7 +514,25 @@ const Navigation = memo(({
         justifyContent: 'space-between',
         alignItems: 'center',
       }}>
-        <div style={logoStyle}>HN</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing[3]}px` }}>
+          <div style={logoStyle}>HN</div>
+          {isUnlocked && (
+            <div style={{
+              padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+              background: `${tokens.colors.accent.tertiary}20`,
+              borderRadius: `${tokens.radius.sm}px`,
+              fontSize: `${tokens.typography.fontSize.sm}px`,
+              color: tokens.colors.accent.tertiary,
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              gap: `${tokens.spacing[1]}px`,
+            }}>
+              <Lock size={12} />
+              Unlocked
+            </div>
+          )}
+        </div>
         <div style={{ display: 'flex', gap: `${tokens.spacing[6]}px` }}>
           {sections.map((section) => (
             <button
@@ -293,7 +552,7 @@ const Navigation = memo(({
 
 Navigation.displayName = 'Navigation';
 
-// Memoized Token Editor Component
+// Token Editor Component (keeping same as before)
 const TokenEditor = memo(({ 
   showTokenEditor, 
   onClose, 
@@ -368,7 +627,7 @@ const TokenEditor = memo(({
             lineHeight: 1,
           }}
         >
-          <X />
+          ✕
         </button>
       </div>
 
@@ -494,7 +753,7 @@ const TokenEditor = memo(({
 
 TokenEditor.displayName = 'TokenEditor';
 
-// Memoized Floating Button
+// Floating Button
 const FloatingButton = memo(({ onClick, tokens }) => {
   const buttonStyle = useMemo(() => ({
     position: 'fixed',
@@ -525,7 +784,7 @@ const FloatingButton = memo(({ onClick, tokens }) => {
 
 FloatingButton.displayName = 'FloatingButton';
 
-// Case Study Detail Component
+// Case Study Detail Component (keeping same as before - truncated for space)
 const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
   const CodeBlock = useCallback(({ children, language = 'tsx' }) => (
     <div style={{
@@ -563,7 +822,6 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
       minHeight: '100vh',
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Back Button */}
         <button
           onClick={onClose}
           className="animate-in"
@@ -587,7 +845,6 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           Back to all case studies
         </button>
 
-        {/* Header */}
         <div className="animate-in stagger-1" style={{ marginBottom: `${tokens.spacing[12]}px` }}>
           <div style={{
             fontFamily: tokens.typography.fontFamily.mono,
@@ -616,7 +873,6 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           </div>
         </div>
 
-        {/* Challenge */}
         <div className="animate-in stagger-2" style={{
           background: tokens.colors.dark.elevated,
           borderRadius: `${tokens.radius.lg}px`,
@@ -641,7 +897,6 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           </p>
         </div>
 
-        {/* Solution */}
         <div className="animate-in stagger-3" style={{
           background: tokens.colors.dark.elevated,
           borderRadius: `${tokens.radius.lg}px`,
@@ -666,7 +921,6 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           </p>
         </div>
 
-        {/* Impact */}
         <div className="animate-in stagger-4" style={{
           background: tokens.colors.dark.elevated,
           borderRadius: `${tokens.radius.lg}px`,
@@ -699,7 +953,6 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           </ul>
         </div>
 
-        {/* Technical Implementation */}
         <div>
           <h2 style={{
             fontFamily: tokens.typography.fontFamily.display,
@@ -710,7 +963,6 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
             Technical Implementation
           </h2>
 
-          {/* Token transformation (Truist) */}
           {study.implementation.before && (
             <div className="animate-in" style={{ marginBottom: `${tokens.spacing[8]}px` }}>
               <h4 style={{
@@ -753,7 +1005,6 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
             </div>
           )}
 
-          {/* Atomic design (Johnson Controls) */}
           {study.implementation.atomic && (
             <div className="animate-in" style={{ marginBottom: `${tokens.spacing[8]}px` }}>
               <h4 style={{
@@ -791,7 +1042,6 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
             </div>
           )}
 
-          {/* Multi-brand theming (Anheuser-Busch) */}
           {study.implementation.brands && (
             <div className="animate-in" style={{ marginBottom: `${tokens.spacing[8]}px` }}>
               <h4 style={{
@@ -837,7 +1087,6 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
             </div>
           )}
 
-          {/* Code example */}
           <div className="animate-in">
             <h4 style={{
               fontSize: `${tokens.typography.fontSize.xl}px`,
@@ -866,6 +1115,15 @@ export default function Portfolio() {
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
   const [navHovering, setNavHovering] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
+  const [pendingCaseId, setPendingCaseId] = useState(null);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  // Check if already unlocked on mount
+  useEffect(() => {
+    const unlocked = sessionStorage.getItem('portfolioUnlocked') === 'true';
+    setIsUnlocked(unlocked);
+  }, []);
 
   // Throttled mouse tracking
   useEffect(() => {
@@ -928,11 +1186,31 @@ export default function Portfolio() {
   }, []);
 
   const handleCaseClick = useCallback((caseId) => {
-    setSelectedCase(caseId);
-  }, []);
+    if (isUnlocked) {
+      setSelectedCase(caseId);
+    } else {
+      setPendingCaseId(caseId);
+      setShowLoginModal(true);
+    }
+  }, [isUnlocked]);
 
   const handleCaseClose = useCallback(() => {
     setSelectedCase(null);
+  }, []);
+
+  const handleLoginSuccess = useCallback(() => {
+    setIsUnlocked(true);
+    setShowLoginModal(false);
+    // Open the pending case study after successful login
+    if (pendingCaseId) {
+      setSelectedCase(pendingCaseId);
+      setPendingCaseId(null);
+    }
+  }, [pendingCaseId]);
+
+  const handleLoginClose = useCallback(() => {
+    setShowLoginModal(false);
+    setPendingCaseId(null);
   }, []);
 
   const handleTokenEditorToggle = useCallback(() => {
@@ -1011,7 +1289,7 @@ export default function Portfolio() {
     .stagger-4 { animation-delay: 400ms; }
   `, [tokens]);
 
-  // Hero Section - Memoized
+  // Hero Section - keeping same (truncated for space)
   const Hero = useMemo(() => {
     const stats = [
       { value: '5+', label: 'Years Engineering' },
@@ -1222,15 +1500,13 @@ export default function Portfolio() {
     );
   }, [tokens, handleSectionChange, handleTokenEditorToggle]);
 
-  // Work Section - Memoized with click handling
+  // Work Section - with lock indicator
   const Work = useMemo(() => {
-    // If a case is selected, show detail view
     if (selectedCase !== null) {
       const study = CASE_STUDIES_DATA.find(s => s.id === selectedCase);
       return <CaseStudyDetail study={study} tokens={tokens} onClose={handleCaseClose} />;
     }
 
-    // Otherwise show grid view
     return (
       <div style={{
         padding: `${tokens.spacing[16]}px ${tokens.spacing[6]}px`,
@@ -1294,6 +1570,29 @@ export default function Portfolio() {
                   background: `linear-gradient(135deg, ${tokens.colors.accent.primary}, ${tokens.colors.accent.secondary})`,
                 }} />
 
+                {!isUnlocked && (
+                  <div style={{
+                    position: 'absolute',
+                    top: `${tokens.spacing[4]}px`,
+                    right: `${tokens.spacing[4]}px`,
+                    background: `${tokens.colors.accent.secondary}20`,
+                    padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                    borderRadius: `${tokens.radius.sm}px`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: `${tokens.spacing[1]}px`,
+                  }}>
+                    <Lock size={14} color={tokens.colors.accent.secondary} />
+                    <span style={{
+                      fontSize: `${tokens.typography.fontSize.sm}px`,
+                      color: tokens.colors.accent.secondary,
+                      fontWeight: '600',
+                    }}>
+                      Locked
+                    </span>
+                  </div>
+                )}
+
                 <div style={{
                   fontFamily: tokens.typography.fontFamily.mono,
                   fontSize: `${tokens.typography.fontSize.sm}px`,
@@ -1339,8 +1638,8 @@ export default function Portfolio() {
                   fontSize: `${tokens.typography.fontSize.sm}px`,
                   fontWeight: '600',
                 }}>
-                  View Details
-                  <ChevronRight size={16} />
+                  {isUnlocked ? 'View Details' : 'Unlock to View'}
+                  {isUnlocked ? <ChevronRight size={16} /> : <Lock size={16} />}
                 </div>
               </div>
             ))}
@@ -1348,9 +1647,9 @@ export default function Portfolio() {
         </div>
       </div>
     );
-  }, [tokens, selectedCase, handleCaseClick, handleCaseClose]);
+  }, [tokens, selectedCase, isUnlocked, handleCaseClick, handleCaseClose]);
 
-  // Lab Section - Memoized
+  // Lab and About sections remain the same (truncated for space)
   const DesignLab = useMemo(() => (
     <div style={{
       padding: `${tokens.spacing[16]}px ${tokens.spacing[6]}px`,
@@ -1447,7 +1746,6 @@ export default function Portfolio() {
     </div>
   ), [tokens]);
 
-  // About Section - Memoized
   const About = useMemo(() => {
     const features = [
       {
@@ -1569,6 +1867,7 @@ export default function Portfolio() {
         tokens={tokens}
         navHovering={navHovering}
         onNavHover={handleNavHover}
+        isUnlocked={isUnlocked}
       />
       {activeSection === 'home' && Hero}
       {activeSection === 'work' && Work}
@@ -1585,6 +1884,13 @@ export default function Portfolio() {
         onClick={handleTokenEditorToggle}
         tokens={tokens}
       />
+      {showLoginModal && (
+        <LoginModal
+          tokens={tokens}
+          onSuccess={handleLoginSuccess}
+          onClose={handleLoginClose}
+        />
+      )}
     </div>
   );
 }
