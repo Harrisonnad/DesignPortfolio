@@ -1611,7 +1611,7 @@ export default function Portfolio() {
                     </div>
                     <div style={{
                       fontSize: `clamp(${tokens.typography.fontSize.sm - 2}px, 2vw, ${tokens.typography.fontSize.sm}px)`,
-                      color: tokens.colors.gray[600],
+                      color: tokens.colors.gray[50],
                     }}>
                       {stat.label}
                     </div>
