@@ -493,7 +493,7 @@ const Navigation = memo(({
     fontFamily: tokens.typography.fontFamily.body,
     fontSize: `clamp(${tokens.typography.fontSize.sm}px, 2.5vw, ${tokens.typography.fontSize.base}px)`,
     fontWeight: '600',
-    color: activeSection === section ? tokens.colors.accent.primary : tokens.colors.gray[600],
+    color: activeSection === section ? tokens.colors.accent.primary : tokens.colors.gray[50],
     cursor: 'pointer',
     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
     borderRadius: `${tokens.radius.sm}px`,
@@ -649,7 +649,7 @@ const TokenEditor = memo(({
 
       <div style={{
         fontSize: `${tokens.typography.fontSize.sm}px`,
-        color: tokens.colors.gray[600],
+        color: tokens.colors.gray[50],
         marginBottom: `${tokens.spacing[4]}px`,
       }}>
         Adjust tokens and watch the page update in real-time
@@ -892,7 +892,7 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           </h1>
           <div style={{
             fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
-            color: tokens.colors.gray[600],
+            color: tokens.colors.gray[50],
           }}>
             {study.role}
           </div>
@@ -915,7 +915,7 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           </h3>
           <p style={{
             fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.lg}px)`,
-            color: tokens.colors.gray[600],
+            color: tokens.colors.gray[50],
             lineHeight: '1.7',
           }}>
             {study.challenge}
@@ -939,7 +939,7 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
           </h3>
           <p style={{
             fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.lg}px)`,
-            color: tokens.colors.gray[600],
+            color: tokens.colors.gray[50],
             lineHeight: '1.7',
           }}>
             {study.solution}
@@ -968,7 +968,7 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
             {study.impact.map((item, i) => (
               <li key={i} style={{
                 fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.lg}px)`,
-                color: tokens.colors.gray[600],
+                color: tokens.colors.gray[50],
                 lineHeight: '1.7',
                 marginBottom: `${tokens.spacing[2]}px`,
               }}>
@@ -1026,7 +1026,7 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
             {screenshot.caption && (
               <p style={{
                 fontSize: `clamp(${tokens.typography.fontSize.sm}px, 2.5vw, ${tokens.typography.fontSize.base}px)`,
-                color: tokens.colors.gray[600],
+                color: tokens.colors.gray[50],
                 lineHeight: '1.6',
                 textAlign: 'center',
                 margin: 0,
@@ -1040,7 +1040,7 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
                     <p style={{
                       marginTop: `${tokens.spacing[4]}px`,
                       fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.lg}px)`,
-                      color: tokens.colors.gray[600],
+                      color: tokens.colors.gray[50],
                       lineHeight: '1.7',
                     }}>
                       {study.implementation.description}
@@ -1084,7 +1084,7 @@ const CaseStudyDetail = memo(({ study, tokens, onClose }) => {
                         </h4>
                         <p style={{
                           fontSize: `clamp(${tokens.typography.fontSize.base}px, 2.5vw, ${tokens.typography.fontSize.lg}px)`,
-                          color: tokens.colors.gray[600],
+                          color: tokens.colors.gray[50],
                           lineHeight: '1.7',
                           margin: 0,
                         }}>
@@ -1517,7 +1517,7 @@ export default function Portfolio() {
                 className="animate-in stagger-2"
                 style={{
                   fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
-                  color: tokens.colors.gray[600],
+                  color: tokens.colors.gray[50],
                   lineHeight: '1.7',
                   marginBottom: `${tokens.spacing[6]}px`,
                   maxWidth: '600px',
@@ -1657,7 +1657,7 @@ export default function Portfolio() {
                     justifyContent: 'center',
                     fontSize: `${tokens.typography.fontSize.sm}px`,
                     fontFamily: tokens.typography.fontFamily.mono,
-                    color: tokens.colors.gray[600],
+                    color: tokens.colors.gray[50],
                     transform: `
                       translate(-50%, -50%) 
                       rotate(${idx * 90}deg) 
@@ -1701,7 +1701,7 @@ export default function Portfolio() {
           </h2>
           <p style={{
             fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
-            color: tokens.colors.gray[600],
+            color: tokens.colors.gray[50],
             marginBottom: `clamp(${tokens.spacing[6]}px, 8vw, ${tokens.spacing[12]}px)`,
             maxWidth: '800px',
           }}>
@@ -1801,7 +1801,7 @@ export default function Portfolio() {
                       background: `${tokens.colors.gray[900]}80`,
                       borderRadius: `${tokens.radius.sm}px`,
                       fontSize: `${tokens.typography.fontSize.sm - 2}px`,
-                      color: tokens.colors.gray[600],
+                      color: tokens.colors.gray[50],
                     }}>
                       {tag}
                     </span>
@@ -1844,7 +1844,7 @@ export default function Portfolio() {
         </h2>
         <p style={{
           fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.xl}px)`,
-          color: tokens.colors.gray[600],
+          color: tokens.colors.gray[50],
           marginBottom: `clamp(${tokens.spacing[6]}px, 8vw, ${tokens.spacing[12]}px)`,
           maxWidth: '800px',
         }}>
@@ -1878,7 +1878,7 @@ export default function Portfolio() {
               <div style={{
                 fontFamily: tokens.typography.fontFamily.mono,
                 fontSize: `${tokens.typography.fontSize.sm}px`,
-                color: tokens.colors.gray[600],
+                color: tokens.colors.gray[50],
                 marginBottom: `${tokens.spacing[1]}px`,
               }}>
                 accent.{key}
@@ -1916,7 +1916,7 @@ export default function Portfolio() {
           </h3>
           <p style={{
             fontSize: `clamp(${tokens.typography.fontSize.base}px, 3vw, ${tokens.typography.fontSize.lg}px)`,
-            color: tokens.colors.gray[600],
+            color: tokens.colors.gray[50],
           }}>
             Click the floating button to adjust colors, spacing, and border radius in real-time
           </p>
@@ -1962,7 +1962,7 @@ export default function Portfolio() {
 
           <p style={{
             fontSize: `clamp(${tokens.typography.fontSize.lg}px, 3.5vw, ${tokens.typography.fontSize['2xl']}px)`,
-            color: tokens.colors.gray[600],
+            color: tokens.colors.gray[50],
             lineHeight: '1.7',
             marginBottom: `clamp(${tokens.spacing[6]}px, 8vw, ${tokens.spacing[12]}px)`,
           }}>
@@ -1998,7 +1998,7 @@ export default function Portfolio() {
                 </h3>
                 <p style={{
                   fontSize: `clamp(${tokens.typography.fontSize.base}px, 2.5vw, ${tokens.typography.fontSize.lg}px)`,
-                  color: tokens.colors.gray[600],
+                  color: tokens.colors.gray[100],
                   lineHeight: '1.7',
                 }}>
                   {item.body}
